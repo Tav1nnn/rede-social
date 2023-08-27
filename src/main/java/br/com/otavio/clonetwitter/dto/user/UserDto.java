@@ -1,9 +1,7 @@
 package br.com.otavio.clonetwitter.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import org.apache.catalina.User;
 
 import java.io.Serializable;
@@ -25,6 +23,8 @@ public class UserDto implements Serializable {
     private String cep;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @PastOrPresent(message = "cannot use a future date")
+    @NotNull(message = "birthday field cannot be null")
     private Date birthday;
 
     @NotBlank(message = "biography field cannot be null")

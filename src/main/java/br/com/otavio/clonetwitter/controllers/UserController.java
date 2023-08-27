@@ -20,7 +20,7 @@ public class UserController {
     private UserService service;
 
     @PostMapping(value = "/cadastrar")
-    public UserDto insertUser(@RequestBody InsertUserDto dto) {
+    public UserDto insertUser(@RequestBody @Valid InsertUserDto dto) {
         return service.insertUser(dto);
 
     }
