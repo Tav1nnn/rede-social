@@ -42,6 +42,14 @@
 			<artifactId>flyway-mysql</artifactId>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.github.dozermapper/dozer-core -->
+		<dependency>
+			<groupId>com.github.dozermapper</groupId>
+			<artifactId>dozer-core</artifactId>
+			<version>6.1.0</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>

@@ -3,12 +3,14 @@ package br.com.otavio.clonetwitter.entities;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.Date;
+
+
+import java.sql.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "user")
-public class User implements Serializable {
+public class UserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -30,6 +32,9 @@ public class User implements Serializable {
     @Column(name = "birthday", nullable = false)
     private Date birthday;
 
+    @Column(name = "biography", nullable = false)
+    private String biography;
+
     @Column(name = "account_non_expired")
     private Boolean accountNonExpired;
 
@@ -42,32 +47,34 @@ public class User implements Serializable {
     @Column(name = "enabled")
     private Boolean enabled;
 
-    public User() {
+    public UserEntity() {
 
     }
 
-    public User(Long id, String username, String email, String password, String cep,
-                Date birthday, Boolean accountNonExpired, Boolean accountNonLocked,
-                Boolean credentialNonExpired, Boolean enabled) {
+    public UserEntity(Long id, String username, String email, String password, String cep,
+                      Date birthday, String biography, Boolean accountNonExpired, Boolean accountNonLocked,
+                      Boolean credentialNonExpired, Boolean enabled) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.cep = cep;
         this.birthday = birthday;
+        this.biography = biography;
         this.accountNonExpired = accountNonExpired;
         this.accountNonLocked = accountNonLocked;
         this.credentialNonExpired = credentialNonExpired;
         this.enabled = enabled;
     }
 
-    public User(Long id, String username, String email, String password, String cep, Date birthday) {
+    public UserEntity(Long id, String username, String email, String password, String cep, Date birthday, String biography) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.cep = cep;
         this.birthday = birthday;
+        this.biography = biography;
     }
 
     public Long getId() {
@@ -114,6 +121,14 @@ public class User implements Serializable {
         return birthday;
     }
 
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
@@ -155,7 +170,7 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        User user = (User) o;
+        UserEntity user = (UserEntity) o;
 
         return Objects.equals(id, user.id);
     }
