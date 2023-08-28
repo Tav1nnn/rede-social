@@ -3,6 +3,8 @@ package br.com.otavio.clonetwitter.exceptions.validation.user;
 import br.com.otavio.clonetwitter.dto.user.InsertUserDto;
 import br.com.otavio.clonetwitter.exceptions.model.FieldMessage;
 import br.com.otavio.clonetwitter.repositories.UserRepository;
+import br.com.otavio.clonetwitter.services.consumesAPI.ConsumesApiCep;
+import jakarta.persistence.Entity;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class InsertUserValidator implements ConstraintValidator<InsertUserValid,
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private ConsumesApiCep consumesApiCep;
+
     @Override
     public void initialize(InsertUserValid ann) {
 
@@ -28,8 +33,15 @@ public class InsertUserValidator implements ConstraintValidator<InsertUserValid,
 
         var userentity = repository.findByEmail(dto.getEmail());
 
-        if(userentity != null){
+        if(userentity != null) {
             list.add(new FieldMessage("email", "There is already a user with this email"));
+        }
+
+        userentity = null;
+        userentity = repository.findByUsername(dto.getUsername());
+
+        if(userentity != null) {
+            list.add(new FieldMessage("username", "There is already a user with this username"));
         }
 
         Date date = new Date();

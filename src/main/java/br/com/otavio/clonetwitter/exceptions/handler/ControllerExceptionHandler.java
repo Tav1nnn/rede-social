@@ -1,6 +1,8 @@
 package br.com.otavio.clonetwitter.exceptions.handler;
 
+import br.com.otavio.clonetwitter.exceptions.model.StandardError;
 import br.com.otavio.clonetwitter.exceptions.model.ValidationError;
+import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.Instant;
+import java.util.Date;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -29,5 +32,18 @@ public class ControllerExceptionHandler {
         }
 
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(validationError);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<StandardError> resourceNotFoundHandler (ResourceNotFoundException e, HttpServletRequest request) {
+        StandardError err = new StandardError();
+
+        err.setTimestamp(Instant.now());
+        err.setStatus(HttpStatus.NOT_FOUND.value());
+        err.setError("Resource not found");
+        err.setMessage(e.getMessage());
+        err.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
     }
 }
