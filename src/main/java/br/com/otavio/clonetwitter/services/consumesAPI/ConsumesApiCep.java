@@ -16,7 +16,7 @@ public class ConsumesApiCep {
         this.restTemplate = restTemplate;
     }
 
-    public CepResponse queryCep(String cep){
+    public String queryCep(String cep){
         apiUrl = "https://viacep.com.br/ws/"+cep+"/json/";
 
         var cepResponse = restTemplate.getForObject(apiUrl, CepResponse.class);
@@ -25,6 +25,7 @@ public class ConsumesApiCep {
             throw new ResourceNotFoundException("Cep not found: "+ cep);
         }
 
-        return cepResponse;
+        return cepResponse.getLocalidade() + ", " + cepResponse.getUf() + ".";
     }
+
 }

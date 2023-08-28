@@ -1,4 +1,4 @@
-package mapper;
+package br.com.otavio.clonetwitter.mapper;
 
 import org.dozer.DozerBeanMapperBuilder;
 import org.dozer.Mapper;

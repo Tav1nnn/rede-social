@@ -1,16 +1,24 @@
 package br.com.otavio.clonetwitter.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.*;
 import org.apache.catalina.User;
+import org.dozer.Mapping;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 import java.sql.Date;
 
 
-public class UserDto implements Serializable {
+@JsonPropertyOrder({"key", "username", "email", "cep", "birthday", "biography"})
+public class UserDto extends RepresentationModel<UserDto> implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Long id;
+
+    @Mapping("id")
+    @JsonProperty("id")
+    private Long key;
 
     @NotBlank(message = "username field cannot be null")
     private String username;
@@ -34,8 +42,8 @@ public class UserDto implements Serializable {
 
     }
 
-    public UserDto(Long id, String username, String email, String cep, Date birthday, String biography) {
-        this.id = id;
+    public UserDto(Long key, String username, String email, String cep, Date birthday, String biography) {
+        this.key = key;
         this.username = username;
         this.email = email;
         this.cep = cep;
@@ -43,12 +51,12 @@ public class UserDto implements Serializable {
         this.biography = biography;
     }
 
-    public Long getId() {
-        return id;
+    public Long getKey() {
+        return key;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setKey(Long key) {
+        this.key = key;
     }
 
     public String getUsername() {
