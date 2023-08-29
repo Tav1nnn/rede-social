@@ -8,6 +8,7 @@ import br.com.otavio.clonetwitter.repositories.UserRepository;
 import br.com.otavio.clonetwitter.services.consumesAPI.ConsumesApiCep;
 import br.com.otavio.clonetwitter.mapper.DozerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
@@ -26,6 +27,9 @@ public class UserService {
     @Autowired
     private ConsumesApiCep consumesApiCep;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private Logger logger = Logger.getLogger(UserService.class.getName());
 
     public UserDto createUser(InsertUserDto dto) {
@@ -33,11 +37,13 @@ public class UserService {
 
         var entity = DozerMapper.parseObject(dto, UserEntity.class);
 
+        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+
         entity = repository.save(entity);
 
         var userdto = DozerMapper.parseObject(entity, UserDto.class);
 
-        userdto.setCep(consumesApiCep.queryCep(userdto.getCep()));
+        //userdto.setCep(consumesApiCep.queryCep(userdto.getCep()));
 
         return userdto.add(linkTo(methodOn(UserController.class).findById(userdto.getKey())).withSelfRel());
     }
