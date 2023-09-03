@@ -4,6 +4,7 @@ import br.com.otavio.clonetwitter.controllers.UserController;
 import br.com.otavio.clonetwitter.dto.user.InsertUserDto;
 import br.com.otavio.clonetwitter.dto.user.UserDto;
 import br.com.otavio.clonetwitter.entities.UserEntity;
+import br.com.otavio.clonetwitter.repositories.RoleRepository;
 import br.com.otavio.clonetwitter.repositories.UserRepository;
 import br.com.otavio.clonetwitter.services.consumesAPI.ConsumesApiCep;
 import br.com.otavio.clonetwitter.mapper.DozerMapper;
@@ -15,6 +16,7 @@ import org.springframework.web.client.ResourceAccessException;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -23,6 +25,9 @@ public class UserService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private RoleRepository repositoryRole;
 
     @Autowired
     private ConsumesApiCep consumesApiCep;
@@ -38,6 +43,8 @@ public class UserService {
         var entity = DozerMapper.parseObject(dto, UserEntity.class);
 
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+
+        entity.getRole().add(repositoryRole.findByName("USER"));
 
         entity = repository.save(entity);
 

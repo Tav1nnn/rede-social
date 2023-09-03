@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -47,13 +48,19 @@ public class UserEntity implements Serializable {
     @Column(name = "enabled")
     private Boolean enabled;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role",
+            joinColumns = {@JoinColumn(name = "id_user")},
+            inverseJoinColumns = {@JoinColumn(name = "id_role")}
+    )
+    private List<RoleEntity> role;
+
     public UserEntity() {
 
     }
 
-    public UserEntity(Long id, String username, String email, String password, String cep,
-                      Date birthday, String biography, Boolean accountNonExpired, Boolean accountNonLocked,
-                      Boolean credentialNonExpired, Boolean enabled) {
+    public UserEntity(Long id, String username, String email, String password, String cep, Date birthday, String biography,
+                      Boolean accountNonExpired, Boolean accountNonLocked, Boolean credentialNonExpired, Boolean enabled, List<RoleEntity> role) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -65,6 +72,7 @@ public class UserEntity implements Serializable {
         this.accountNonLocked = accountNonLocked;
         this.credentialNonExpired = credentialNonExpired;
         this.enabled = enabled;
+        this.role = role;
     }
 
     public UserEntity(Long id, String username, String email, String password, String cep, Date birthday, String biography) {
@@ -155,6 +163,14 @@ public class UserEntity implements Serializable {
 
     public void setCredentialNonExpired(Boolean credentialNonExpired) {
         this.credentialNonExpired = credentialNonExpired;
+    }
+
+    public List<RoleEntity> getRole() {
+        return role;
+    }
+
+    public void setRole(List<RoleEntity> role) {
+        this.role = role;
     }
 
     public Boolean getEnabled() {
