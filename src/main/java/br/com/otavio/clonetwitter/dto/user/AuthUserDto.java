@@ -1,19 +1,20 @@
 package br.com.otavio.clonetwitter.dto.user;
 
-import java.io.Serial;
-import java.io.Serializable;
+import jakarta.validation.constraints.NotBlank;
 
-public class AccountCredentialsDTO implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class AuthUserDto {
 
+    @NotBlank(message = "username field cannot be null")
     private String username;
+
+    @NotBlank(message = "password field cannot be null")
     private String password;
 
-    public AccountCredentialsDTO () {
+    public AuthUserDto() {
 
     }
 
-    public AccountCredentialsDTO(String username, String password) {
+    public AuthUserDto(String username, String password) {
         this.username = username;
         this.password = password;
     }
@@ -33,5 +34,4 @@ public class AccountCredentialsDTO implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    
 }

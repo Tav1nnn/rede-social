@@ -1,17 +1,22 @@
 package br.com.otavio.clonetwitter.entities;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 
 
 import java.sql.Date;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "user")
-public class UserEntity implements Serializable {
+public class UserEntity implements Serializable, UserDetails {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -36,22 +41,10 @@ public class UserEntity implements Serializable {
     @Column(name = "biography", nullable = false)
     private String biography;
 
-    @Column(name = "account_non_expired")
-    private Boolean accountNonExpired;
-
-    @Column(name = "account_non_locked")
-    private Boolean accountNonLocked;
-
-    @Column(name = "credentials_non_expired")
-    private Boolean credentialNonExpired;
-
-    @Column(name = "enabled")
-    private Boolean enabled;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
-            joinColumns = {@JoinColumn(name = "id_user")},
-            inverseJoinColumns = {@JoinColumn(name = "id_role")}
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
     private List<RoleEntity> role;
 
@@ -59,8 +52,7 @@ public class UserEntity implements Serializable {
 
     }
 
-    public UserEntity(Long id, String username, String email, String password, String cep, Date birthday, String biography,
-                      Boolean accountNonExpired, Boolean accountNonLocked, Boolean credentialNonExpired, Boolean enabled, List<RoleEntity> role) {
+    public UserEntity(Long id, String username, String email, String password, String cep, Date birthday, String biography, List<RoleEntity> role) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -68,21 +60,7 @@ public class UserEntity implements Serializable {
         this.cep = cep;
         this.birthday = birthday;
         this.biography = biography;
-        this.accountNonExpired = accountNonExpired;
-        this.accountNonLocked = accountNonLocked;
-        this.credentialNonExpired = credentialNonExpired;
-        this.enabled = enabled;
         this.role = role;
-    }
-
-    public UserEntity(Long id, String username, String email, String password, String cep, Date birthday, String biography) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.cep = cep;
-        this.birthday = birthday;
-        this.biography = biography;
     }
 
     public Long getId() {
@@ -96,6 +74,7 @@ public class UserEntity implements Serializable {
     public String getUsername() {
         return username;
     }
+
 
     public void setUsername(String username) {
         this.username = username;
@@ -141,31 +120,8 @@ public class UserEntity implements Serializable {
         this.birthday = birthday;
     }
 
-    public Boolean getAccountNonExpired() {
-        return accountNonExpired;
-    }
-
-    public void setAccountNonExpired(Boolean accountNonExpired) {
-        this.accountNonExpired = accountNonExpired;
-    }
-
-    public Boolean getAccountNonLocked() {
-        return accountNonLocked;
-    }
-
-    public void setAccountNonLocked(Boolean accountNonLocked) {
-        this.accountNonLocked = accountNonLocked;
-    }
-
-    public Boolean getCredentialNonExpired() {
-        return credentialNonExpired;
-    }
-
-    public void setCredentialNonExpired(Boolean credentialNonExpired) {
-        this.credentialNonExpired = credentialNonExpired;
-    }
-
     public List<RoleEntity> getRole() {
+
         return role;
     }
 
@@ -173,12 +129,32 @@ public class UserEntity implements Serializable {
         this.role = role;
     }
 
-    public Boolean getEnabled() {
-        return enabled;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return role.stream().map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
 
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     @Override

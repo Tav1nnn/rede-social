@@ -31,8 +31,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(
                         authorizeHttpRequests -> authorizeHttpRequests
-                                .requestMatchers("api/user/v1/cadastras",
-                                        "api/user/v1/logar",
+                                .requestMatchers("/api/user/v1/cadastrar",
+                                        "/api/user/v1/login",
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**"
                                         ).permitAll()

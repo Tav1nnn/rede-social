@@ -1,6 +1,7 @@
 package br.com.otavio.clonetwitter.services;
 
 import br.com.otavio.clonetwitter.dto.TokenDTO;
+import br.com.otavio.clonetwitter.entities.RoleEntity;
 import br.com.otavio.clonetwitter.services.exceptions.InvalidJwtAuthenticationException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -20,6 +21,7 @@ import javax.annotation.PostConstruct;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -41,7 +43,8 @@ public class JwtService {
         algorithm = Algorithm.HMAC256(secretKey.getBytes());
     }
 
-    public TokenDTO createAcessToken(String username, List<String> roles){
+    public TokenDTO createAcessToken(String username, List<RoleEntity> roles){
+
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliSeconds);
         var accessToken = getAcessToken(username, roles, now, validity);
@@ -50,12 +53,16 @@ public class JwtService {
         return new TokenDTO(username, true, now, validity, accessToken, refreshToken);
     }
 
-    private String getAcessToken(String username, List<String> roles, Date now, Date validity) {
+    private String getAcessToken(String username, List<RoleEntity> roles, Date now, Date validity) {
         String issuerUrl = ServletUriComponentsBuilder
                 .fromCurrentContextPath().build().toUriString();
 
+        List<String> roleNames = roles.stream()
+                .map(RoleEntity::getName)
+                .collect(Collectors.toList());
+
         return JWT.create()
-                .withClaim("Role", roles)
+                .withClaim("Role", roleNames)
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
                 .withSubject(username)
@@ -64,11 +71,15 @@ public class JwtService {
                 .strip();
     }
 
-    private String getRefreshToken(String username, List<String> roles, Date now) {
+    private String getRefreshToken(String username, List<RoleEntity> roles, Date now) {
         Date validityRefreshToken = new Date(now.getTime() + validityInMilliSeconds*3);
 
+        List<String> roleNames = roles.stream()
+                .map(RoleEntity::getName)
+                .collect(Collectors.toList());
+
         return JWT.create()
-                .withClaim("role", roles)
+                .withClaim("role", roleNames)
                 .withIssuedAt(now)
                 .withExpiresAt(validityRefreshToken)
                 .withSubject(username)
