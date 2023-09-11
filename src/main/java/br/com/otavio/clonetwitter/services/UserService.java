@@ -50,42 +50,29 @@ public class UserService implements UserDetailsService {
     public void createUser(InsertUserDto dto) {
         logger.info("Service: creating one user");
 
-        var entity = DozerMapper.parseObject(dto, UserEntity.class);
-
+        UserEntity entity = DozerMapper.parseObject(dto, UserEntity.class);
         entity.setRole(new ArrayList<>());
-
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
-
-        RoleEntity role = repositoryRole.findByName("USER");
-
         entity.getRole().add(repositoryRole.findByName("USER"));
-
         entity = repository.save(entity);
-
-        var userdto = DozerMapper.parseObject(entity, UserDto.class);
-
     }
     public UserDto findById(Long id) {
-        Optional<UserEntity> optional = repository.findById(id);
-
-        var userEnity = optional.orElseThrow(() -> new ResourceAccessException("User not found. Id: " +  id));
-
-        var userdto = DozerMapper.parseObject(userEnity, UserDto.class);
-
-        userdto.setCep(consumesApiCep.queryCep(userdto.getCep()));
-
-        return userdto.add(linkTo(methodOn(UserController.class).findById(userdto.getKey())).withSelfRel());
+        return repository.findById(id)
+                .map(this::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found. Id: " + id));
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = repository.findByUsername(username);
+        return repository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Username " + username + " not found"));
+    }
 
-        if(user == null){
-            throw new ResourceNotFoundException("Username " + username + " not found");
-        }
-
-        return user;
+    private UserDto toDto(UserEntity entity) {
+        UserDto dto = DozerMapper.parseObject(entity, UserDto.class);
+        dto.setCep(consumesApiCep.queryCep(entity.getCep()));
+        dto.add(linkTo(methodOn(UserController.class).findById(dto.getKey())).withSelfRel());
+        return dto;
     }
 
 }

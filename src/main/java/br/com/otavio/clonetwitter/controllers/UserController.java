@@ -40,29 +40,23 @@ public class UserController {
 
     @PostMapping(value = "/cadastrar")
     public void createUser(@RequestBody @Valid InsertUserDto dto, HttpServletResponse response) {
-
         service.createUser(dto);
-
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
 
     @PostMapping(value = "/login")
     public ResponseEntity<TokenDTO> login(@RequestBody @Valid AuthUserDto dto){
-
         var authenticationToken = new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
         var authentication = manager.authenticate(authenticationToken);
 
-        UserEntity entity;
-        entity = (UserEntity) authentication.getPrincipal();
+        UserEntity entity = (UserEntity) authentication.getPrincipal();
 
         return ResponseEntity.ok().body(jwtService.createAcessToken(entity.getUsername(), entity.getRole()));
     }
 
-    @GetMapping(value = "{id}")
+    @GetMapping(value = "findbyid/{id}")
     public ResponseEntity<UserDto> findById(@PathVariable Long id){
-
         var userDto = service.findById(id);
-
         return ResponseEntity.ok().body(userDto);
     }
 }
