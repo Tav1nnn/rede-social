@@ -1,17 +1,21 @@
 package br.com.otavio.clonetwitter.exceptions.validation.user;
 
 import br.com.otavio.clonetwitter.dto.user.InsertUserDto;
+import br.com.otavio.clonetwitter.entities.UserEntity;
 import br.com.otavio.clonetwitter.exceptions.model.FieldMessage;
 import br.com.otavio.clonetwitter.repositories.UserRepository;
 import br.com.otavio.clonetwitter.services.consumesAPI.ConsumesApiCep;
+import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.Entity;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class InsertUserValidator implements ConstraintValidator<InsertUserValid, InsertUserDto> {
@@ -31,16 +35,16 @@ public class InsertUserValidator implements ConstraintValidator<InsertUserValid,
     public boolean isValid (InsertUserDto dto, ConstraintValidatorContext context) {
         List<FieldMessage> list = new ArrayList<>();
 
-        var userentity = repository.findByEmail(dto.getEmail());
+        Optional<UserEntity> optional = repository.findByEmail(dto.getEmail());
 
-        if(userentity != null) {
+        if(optional.isPresent()) {
             list.add(new FieldMessage("email", "There is already a user with this email"));
         }
 
-        userentity = null;
-        userentity = repository.findByUsername(dto.getUsername());
+        optional = repository.findByUsername(dto.getUsername());
 
-        if(userentity != null) {
+
+        if(optional.isPresent()) {
             list.add(new FieldMessage("username", "There is already a user with this username"));
         }
 

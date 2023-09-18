@@ -4,21 +4,26 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.io.Serializable;
-import java.util.Objects;
 
-@Entity(name = "role")
+@Entity(name = "like")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleEntity implements Serializable {
+public class LikeEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Column(name = "create_at", nullable = false)
+    private String create_at;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "publication_like")
+    private PublicationEntity publication;
 }

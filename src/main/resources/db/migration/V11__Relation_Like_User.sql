@@ -1,0 +1,1 @@
+ALTER TABLE `like` ADD CONSTRAINT `user_like` FOREIGN KEY (`id`) REFERENCES `user` (`id`);

@@ -8,7 +8,7 @@ security:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/clone_twitter?useTimezone=true&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/rede_social?useTimezone=true&serverTimezone=UTC
     username: root
     password: 123
   jpa:

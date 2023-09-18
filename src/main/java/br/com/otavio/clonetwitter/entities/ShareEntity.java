@@ -6,19 +6,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Objects;
 
-@Entity(name = "role")
+@Entity(name = "share")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleEntity implements Serializable {
+public class ShareEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Column(name = "create_at", nullable = false)
+    private String create_at;
 
+    @ManyToOne
+    @JoinColumn(name = "publication_share")
+    private PublicationEntity publication;
 }

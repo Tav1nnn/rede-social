@@ -1,0 +1,1 @@
+ALTER TABLE `share` ADD CONSTRAINT `publication_share` FOREIGN KEY (`id`) REFERENCES `publication` (`id`);

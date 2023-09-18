@@ -1,0 +1,1 @@
+ALTER TABLE `publication` ADD CONSTRAINT `user_publication` FOREIGN KEY (`id`) REFERENCES `user` (`id`);

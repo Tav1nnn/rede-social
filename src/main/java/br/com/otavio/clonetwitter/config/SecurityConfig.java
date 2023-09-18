@@ -32,16 +32,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         authorizeHttpRequests -> authorizeHttpRequests
                                 .requestMatchers(
-                                        "/api/user/v1/cadastrar",
+                                        "/api/user/v1/register",
                                         "/api/user/v1/login",
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**"
                                         ).permitAll()
                                 .requestMatchers(
                                         "/api/user/v1/findbyid/**",
-                                        "api/user/v1/publicacao",
-                                        "api/user/v1/curtida",
-                                        "api/user/v1/comentario"
+                                        "api/publication/v1/",
+                                        "api/like/v1/",
+                                        "api/share/v1/"
                                         ).authenticated()
                 )
                 .cors()

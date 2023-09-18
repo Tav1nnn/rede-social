@@ -38,7 +38,7 @@ public class UserController {
         this.jwtService = jwtService;
     }
 
-    @PostMapping(value = "/cadastrar")
+    @PostMapping(value = "/register")
     public void createUser(@RequestBody @Valid InsertUserDto dto, HttpServletResponse response) {
         service.createUser(dto);
         response.setStatus(HttpServletResponse.SC_CREATED);
@@ -46,7 +46,7 @@ public class UserController {
 
     @PostMapping(value = "/login")
     public ResponseEntity<TokenDTO> login(@RequestBody @Valid AuthUserDto dto){
-        var authenticationToken = new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
+        var authenticationToken = new UsernamePasswordAuthenticationToken(dto.username(), dto.password());
         var authentication = manager.authenticate(authenticationToken);
 
         UserEntity entity = (UserEntity) authentication.getPrincipal();
