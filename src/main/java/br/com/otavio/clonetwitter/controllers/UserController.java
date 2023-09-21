@@ -42,7 +42,7 @@ public class UserController {
         return ResponseEntity.ok().body(tokenDto);
     }
 
-    @GetMapping(value = "findbyid/{id}")
+    @GetMapping(value = "/findbyid/{id}")
     public ResponseEntity<UserDto> findById(@PathVariable Long id){
         var userDto = service.findById(id);
         return ResponseEntity.ok().body(userDto);

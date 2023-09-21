@@ -2,6 +2,7 @@ package br.com.otavio.clonetwitter.services;
 
 import br.com.otavio.clonetwitter.controllers.UserController;
 import br.com.otavio.clonetwitter.dto.TokenDTO;
+import br.com.otavio.clonetwitter.dto.publication.PublicationDto;
 import br.com.otavio.clonetwitter.dto.user.AuthUserDto;
 import br.com.otavio.clonetwitter.dto.user.InsertUserDto;
 import br.com.otavio.clonetwitter.dto.user.UserDto;
@@ -17,6 +18,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

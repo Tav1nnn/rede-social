@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
 
 import java.io.Serializable;
+import java.sql.Date;
 
-@Entity(name = "like")
+@Entity(name = "likes")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,10 +21,14 @@ public class LikeEntity implements Serializable {
     private Long id;
 
     @Column(name = "create_at", nullable = false)
-    private String create_at;
+    private Date create_at;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "publication_like")
     private PublicationEntity publication;
+
+    @ManyToOne
+    @JoinColumn(name = "user_like")
+    private UserEntity user;
 }

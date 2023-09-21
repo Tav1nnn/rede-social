@@ -2,16 +2,15 @@ package br.com.otavio.clonetwitter.entities;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
 @Entity(name = "publication")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PublicationEntity implements Serializable {

@@ -1,10 +1,12 @@
 package br.com.otavio.clonetwitter.services;
 
 import br.com.otavio.clonetwitter.dto.publication.NewPublicationDto;
+import br.com.otavio.clonetwitter.dto.publication.PublicationDto;
 import br.com.otavio.clonetwitter.entities.PublicationEntity;
 import br.com.otavio.clonetwitter.entities.UserEntity;
 import br.com.otavio.clonetwitter.mapper.DozerMapper;
 import br.com.otavio.clonetwitter.repositories.PublicationRepository;
+import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,15 @@ public class PublicationService {
 
         publicationRepository.save(publicationEntity);
     }
+
+    public PublicationDto findById(Long id) {
+
+        PublicationEntity entity = publicationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Id not found"));
+
+        return DozerMapper.parseObject(entity,PublicationDto.class);
+    }
+
 
     private PublicationEntity createPublicationEntity(NewPublicationDto publicationDto) {
         PublicationEntity publicationEntity = new PublicationEntity();
