@@ -14,21 +14,27 @@ import java.sql.Date;
 public class PublicationService {
 
     @Autowired
-    private PublicationRepository repository;
+    private PublicationRepository publicationRepository;
 
     @Autowired
     private UserService userService;
 
-    public void newPublication(NewPublicationDto dto) {
-        PublicationEntity entity = new PublicationEntity();
+    public void createNewPublication(NewPublicationDto publicationDto){
+        PublicationEntity publicationEntity = createPublicationEntity(publicationDto);
+        UserEntity userEntity = getUserEntityFromService();
+        publicationEntity.setUser(userEntity);
 
-        entity.setCaption(dto.caption());
-        entity.setCreate_at(new Date(new java.util.Date().getTime()));
-        UserEntity entityUser = DozerMapper.parseObject(userService.getUser(), UserEntity.class);
-        System.out.println(entityUser.getId());
-        entity.setUser(entityUser);
+        publicationRepository.save(publicationEntity);
+    }
 
-        repository.save(entity);
+    private PublicationEntity createPublicationEntity(NewPublicationDto publicationDto) {
+        PublicationEntity publicationEntity = new PublicationEntity();
+        publicationEntity.setCaption(publicationDto.caption());
+        publicationEntity.setCreate_at(new Date(new java.util.Date().getTime()));
+        return publicationEntity;
+    }
 
+    private UserEntity getUserEntityFromService() {
+        return DozerMapper.parseObject(userService.getUser(), UserEntity.class);
     }
 }

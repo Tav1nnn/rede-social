@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class PublicationController {
 
     @Autowired
-    private PublicationService service;
+    private PublicationService publicationService;
 
     @PostMapping
-    public void newPublication(@RequestBody NewPublicationDto dto, HttpServletResponse response) {
-        service.newPublication(dto);
+    public void createNewPublication(@RequestBody NewPublicationDto newPublicationDto, HttpServletResponse response) {
+        publicationService.createNewPublication(newPublicationDto);
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
 }

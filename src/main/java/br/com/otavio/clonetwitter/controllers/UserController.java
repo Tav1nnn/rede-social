@@ -10,6 +10,7 @@ import br.com.otavio.clonetwitter.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jdk.nashorn.internal.parser.Token;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,15 +29,6 @@ public class UserController {
     @Autowired
     private UserService service;
 
-    @Autowired
-    private AuthenticationManager manager;
-
-    @Autowired
-    private JwtService jwtService;
-
-    public UserController(JwtService jwtService) {
-        this.jwtService = jwtService;
-    }
 
     @PostMapping(value = "/register")
     public void createUser(@RequestBody @Valid InsertUserDto dto, HttpServletResponse response) {
@@ -45,13 +37,9 @@ public class UserController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<TokenDTO> login(@RequestBody @Valid AuthUserDto dto){
-        var authenticationToken = new UsernamePasswordAuthenticationToken(dto.username(), dto.password());
-        var authentication = manager.authenticate(authenticationToken);
-
-        UserEntity entity = (UserEntity) authentication.getPrincipal();
-
-        return ResponseEntity.ok().body(jwtService.createAcessToken(entity.getUsername(), entity.getRole()));
+    public ResponseEntity<TokenDTO> login(@RequestBody @Valid AuthUserDto authUserDto){
+        TokenDTO tokenDto = service.login(authUserDto);
+        return ResponseEntity.ok().body(tokenDto);
     }
 
     @GetMapping(value = "findbyid/{id}")
