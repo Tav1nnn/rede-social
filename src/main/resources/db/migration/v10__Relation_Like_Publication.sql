@@ -1,1 +1,0 @@
-ALTER TABLE `like` ADD CONSTRAINT `publication_like` FOREIGN KEY (`id`) REFERENCES `publication` (`id`);

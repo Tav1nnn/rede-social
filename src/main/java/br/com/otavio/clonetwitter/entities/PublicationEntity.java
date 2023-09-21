@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.List;
 
 @Entity(name = "publication")
@@ -24,7 +25,7 @@ public class PublicationEntity implements Serializable {
     private String caption;
 
     @Column(name = "create_at", nullable = false)
-    private String create_at;
+    private Date create_at;
 
     @ManyToOne
     @JoinColumn(name = "user_publication")

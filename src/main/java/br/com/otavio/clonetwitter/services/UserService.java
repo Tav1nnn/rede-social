@@ -10,6 +10,8 @@ import br.com.otavio.clonetwitter.services.consumesAPI.ConsumesApiCep;
 import br.com.otavio.clonetwitter.mapper.DozerMapper;
 import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,6 +21,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @Service
@@ -57,6 +60,20 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return repository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Username " + username + " not found"));
+    }
+
+
+    public UserDto getUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        UserEntity entity = null;
+        if (authentication != null && authentication.isAuthenticated()) {
+            Optional<UserEntity> optional = repository.findByUsername(authentication.getName());
+
+            entity = optional.orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        }
+
+        return DozerMapper.parseObject(entity, UserDto.class);
     }
 
     private UserDto toDto(UserEntity entity) {
