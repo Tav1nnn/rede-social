@@ -4,6 +4,7 @@ import br.com.otavio.clonetwitter.exceptions.model.StandardError;
 import br.com.otavio.clonetwitter.exceptions.model.ValidationError;
 import br.com.otavio.clonetwitter.services.exceptions.InvalidJwtAuthenticationException;
 import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
+import br.com.otavio.clonetwitter.services.exceptions.UserAlreadyLikedException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,6 +56,18 @@ public class ControllerExceptionHandler {
         err.setTimestamp(Instant.now());
         err.setStatus(HttpStatus.BAD_REQUEST.value());
         err.setError("Invalid Token");
+        err.setMessage(e.getMessage());
+        err.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+    @ExceptionHandler(UserAlreadyLikedException.class)
+    public ResponseEntity<StandardError> userAlreadyLikedException(UserAlreadyLikedException e, HttpServletRequest request) {
+        StandardError err = new StandardError();
+
+        err.setTimestamp(Instant.now());
+        err.setStatus(HttpStatus.BAD_REQUEST.value());
+        err.setError("User Already Liked");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
 

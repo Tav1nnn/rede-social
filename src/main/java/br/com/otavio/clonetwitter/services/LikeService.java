@@ -6,10 +6,13 @@ import br.com.otavio.clonetwitter.entities.UserEntity;
 import br.com.otavio.clonetwitter.mapper.DozerMapper;
 import br.com.otavio.clonetwitter.repositories.LikeRepository;
 import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
+import br.com.otavio.clonetwitter.services.exceptions.UserAlreadyLikedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.util.Optional;
 
 @Service
 public class LikeService {
@@ -24,10 +27,14 @@ public class LikeService {
     private LikeRepository likeRepository;
 
     public void createNewLike(Long id) {
-        LikeEntity likeEntity = new LikeEntity();
-        likeEntity.setCreate_at(new Date(new java.util.Date().getTime()));
-        likeEntity.setUser(DozerMapper.parseObject(userService.getUser(), UserEntity.class));
-        likeEntity.setPublication(DozerMapper.parseObject(publicationService.findById(id), PublicationEntity.class));
+        UserEntity userEntity = getUserEntity();
+        PublicationEntity publicationEntity = findPublicationById(id);
+
+        if (hasUserAlreadyLiked(userEntity, publicationEntity)) {
+            throw new UserAlreadyLikedException("You already liked this post");
+        }
+
+        LikeEntity likeEntity = createLikeEntity(userEntity, publicationEntity);
 
         likeRepository.save(likeEntity);
     }
@@ -37,4 +44,25 @@ public class LikeService {
 
         likeRepository.delete(entity);
     }
+
+    private UserEntity getUserEntity() {
+        return DozerMapper.parseObject(userService.getUser(), UserEntity.class);
+    }
+
+    private PublicationEntity findPublicationById(Long id) {
+        return DozerMapper.parseObject(publicationService.findById(id), PublicationEntity.class);
+    }
+
+    private boolean hasUserAlreadyLiked(UserEntity userEntity, PublicationEntity publicationEntity) {
+        return likeRepository.findByUserAndPublication(userEntity, publicationEntity).isPresent();
+    }
+
+    private LikeEntity createLikeEntity(UserEntity userEntity, PublicationEntity publicationEntity) {
+        LikeEntity likeEntity = new LikeEntity();
+        likeEntity.setCreate_at(new Date(new java.util.Date().getTime()));
+        likeEntity.setUser(userEntity);
+        likeEntity.setPublication(publicationEntity);
+        return likeEntity;
+    }
+
 }
