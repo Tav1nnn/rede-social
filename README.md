@@ -33,8 +33,6 @@ Até o momento,  já foi desenvolvido:
 
 - 📝 **Nova Publicação**: Os usuários podem criar e compartilhar novas publicações.
 
-## Configurações e Recursos Adicionais
-Para uma experiência mais abrangente e segura, também implementamos:
 
 ## Configurações e Recursos Adicionais
 Para uma experiência mais abrangente e segura, estou utilizando os seguintes recursos:
