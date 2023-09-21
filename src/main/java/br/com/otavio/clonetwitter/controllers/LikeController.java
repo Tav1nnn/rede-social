@@ -4,10 +4,7 @@ import br.com.otavio.clonetwitter.entities.LikeEntity;
 import br.com.otavio.clonetwitter.services.LikeService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "api/like/v1")
@@ -21,6 +18,11 @@ public class LikeController {
         likeService.createNewLike(id);
 
         response.setStatus(HttpServletResponse.SC_CREATED);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public void deleteLike(@PathVariable Long id){
+        likeService.deleteLike(id);
     }
 
 }

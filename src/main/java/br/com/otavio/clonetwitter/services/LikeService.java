@@ -5,6 +5,7 @@ import br.com.otavio.clonetwitter.entities.PublicationEntity;
 import br.com.otavio.clonetwitter.entities.UserEntity;
 import br.com.otavio.clonetwitter.mapper.DozerMapper;
 import br.com.otavio.clonetwitter.repositories.LikeRepository;
+import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +30,11 @@ public class LikeService {
         likeEntity.setPublication(DozerMapper.parseObject(publicationService.findById(id), PublicationEntity.class));
 
         likeRepository.save(likeEntity);
+    }
+
+    public void deleteLike(Long id) {
+        LikeEntity entity = likeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id not found"));
+
+        likeRepository.delete(entity);
     }
 }
