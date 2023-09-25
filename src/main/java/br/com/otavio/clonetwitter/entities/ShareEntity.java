@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 @Entity(name = "share")
 @Data
@@ -19,9 +20,13 @@ public class ShareEntity implements Serializable {
     private Long id;
 
     @Column(name = "create_at", nullable = false)
-    private String create_at;
+    private Date create_at;
 
     @ManyToOne
     @JoinColumn(name = "publication_share")
     private PublicationEntity publication;
+
+    @ManyToOne
+    @JoinColumn(name = "user_share")
+    private UserEntity user;
 }

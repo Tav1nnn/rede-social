@@ -1,10 +1,11 @@
-package br.com.otavio.clonetwitter.exceptions.handler;
+package br.com.otavio.clonetwitter.controllers.exceptions.handler;
 
-import br.com.otavio.clonetwitter.exceptions.model.StandardError;
-import br.com.otavio.clonetwitter.exceptions.model.ValidationError;
+import br.com.otavio.clonetwitter.controllers.exceptions.model.StandardError;
+import br.com.otavio.clonetwitter.controllers.exceptions.model.ValidationError;
 import br.com.otavio.clonetwitter.services.exceptions.InvalidJwtAuthenticationException;
 import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
 import br.com.otavio.clonetwitter.services.exceptions.UserAlreadyLikedException;
+import br.com.otavio.clonetwitter.services.exceptions.UserAlreadyShareException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.Instant;
-import java.util.Date;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -68,6 +68,18 @@ public class ControllerExceptionHandler {
         err.setTimestamp(Instant.now());
         err.setStatus(HttpStatus.BAD_REQUEST.value());
         err.setError("User Already Liked");
+        err.setMessage(e.getMessage());
+        err.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+    @ExceptionHandler(UserAlreadyShareException.class)
+    public ResponseEntity<StandardError> userAlreadyShareException(UserAlreadyShareException e, HttpServletRequest request) {
+        StandardError err = new StandardError();
+
+        err.setTimestamp(Instant.now());
+        err.setStatus(HttpStatus.BAD_REQUEST.value());
+        err.setError("User Already Share");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
 

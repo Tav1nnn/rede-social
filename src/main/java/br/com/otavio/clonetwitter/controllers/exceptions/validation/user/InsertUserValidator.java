@@ -1,15 +1,12 @@
-package br.com.otavio.clonetwitter.exceptions.validation.user;
+package br.com.otavio.clonetwitter.controllers.exceptions.validation.user;
 
 import br.com.otavio.clonetwitter.dto.user.InsertUserDto;
 import br.com.otavio.clonetwitter.entities.UserEntity;
-import br.com.otavio.clonetwitter.exceptions.model.FieldMessage;
+import br.com.otavio.clonetwitter.controllers.exceptions.model.FieldMessage;
 import br.com.otavio.clonetwitter.repositories.UserRepository;
 import br.com.otavio.clonetwitter.services.consumesAPI.ConsumesApiCep;
-import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
-import jakarta.persistence.Entity;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;

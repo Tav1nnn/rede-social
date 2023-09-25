@@ -1,6 +1,6 @@
 package br.com.otavio.clonetwitter.dto.user;
 
-import br.com.otavio.clonetwitter.exceptions.validation.user.InsertUserValid;
+import br.com.otavio.clonetwitter.controllers.exceptions.validation.user.InsertUserValid;
 import jakarta.validation.constraints.NotBlank;
 
 @InsertUserValid

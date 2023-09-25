@@ -1,4 +1,4 @@
-package br.com.otavio.clonetwitter.exceptions.validation.user;
+package br.com.otavio.clonetwitter.controllers.exceptions.validation.user;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

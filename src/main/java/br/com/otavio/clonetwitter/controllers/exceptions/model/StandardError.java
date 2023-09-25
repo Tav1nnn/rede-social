@@ -1,4 +1,4 @@
-package br.com.otavio.clonetwitter.exceptions.model;
+package br.com.otavio.clonetwitter.controllers.exceptions.model;
 
 import java.io.Serializable;
 import java.time.Instant;
