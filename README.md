@@ -48,3 +48,38 @@ Para uma experiência mais abrangente e segura, estou utilizando os seguintes re
 - 🔒 **Auth0 JWT**: A autenticação JWT fornecida pela Auth0 é integrada ao sistema para garantir a segurança das informações e a autenticação de usuários de maneira eficiente e escalável.
 
 
+## Pré-requisitos
+
+Antes de começar, certifique-se de que você tenha o seguinte software instalado em seu sistema:
+
+- Java Development Kit (JDK) 17.
+- Apache Maven
+- Git (opcional, se você quiser clonar o repositório)
+
+## Clone o Repositório
+Se você tem o Git instalado, você pode clonar este repositório com o seguinte comando:
+
+```bash
+git clone https://github.com/Tav1nnn/rede-social
+```
+
+## Inicializando a Aplicação
+
+1. Acesse o diretório pelo terminal
+Exemplo:
+```bash
+cd meus-arquivos/rede-social
+```
+
+2. Rode este comendo para construir o projeto Maven
+```bash
+mvn clean install
+```
+
+3. Inicie o projeto
+```bash
+mvn clean install
+```
+
+4. Acesse o projeto pela porta padrão `http://localhost:8080`
+
