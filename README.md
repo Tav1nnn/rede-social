@@ -3,35 +3,25 @@
 ## Descrição do Projeto
 Este é um projeto pessoal que visa criar uma API de rede social de publicações, utilizando o poderoso framework Spring Boot. A ideia é desenvolver uma plataforma que permita aos usuários compartilhar suas experiências por meio de publicações, interagir com outras pessoas e explorar um ambiente social dinâmico.
 
-## Funcionalidades do Sistema
+## Funcionalidades a serem desenvolvidas
 O sistema contará com uma variedade de funcionalidades, tornando a experiência do usuário rica e envolvente:
 
-1. 💖 **Curtidas**: Os usuários podem expressar seu apreço por publicações curtindo-as.
-
-2. 💬 **Comentários**: Os usuários têm a capacidade de comentar nas publicações, permitindo discussões e interações significativas.
-
-3. 🔄 **Compartilhamento**: As publicações podem ser compartilhadas, ampliando sua visibilidade para outros usuários.
-
-4. 📣 **Notificações**: Os usuários receberão notificações sobre atividades relevantes, como curtidas e comentários em suas publicações.
-
-5. 👥 **Seguidores**: Os usuários podem seguir outros usuários para acompanhar suas atualizações e interagir com suas publicações.
-
-6. 🔍 **Pesquisa com Filtros**: Uma funcionalidade de pesquisa avançada permitirá aos usuários encontrar publicações específicas ou outros usuários com base em diferentes critérios.
-
-7. 📄 **Feed de Publicações**: Os usuários terão acesso a um feed personalizado, exibindo as publicações de quem eles seguem.
-
-8. 📚 **Swagger**: Utilizaremos o Swagger para documentar e facilitar o consumo da API, tornando-a mais acessível e amigável.
-
-9. 🧪 **Testes**: Implementaremos testes automatizados para garantir a confiabilidade e a qualidade do sistema.
+- 💬 **Comentários**: Os usuários têm a capacidade de comentar nas publicações, permitindo discussões e interações significativas.
+- 📣 **Notificações**: Os usuários receberão notificações sobre atividades relevantes, como curtidas e comentários em suas publicações.
+- 👥 **Seguidores**: Os usuários podem seguir outros usuários para acompanhar suas atualizações e interagir com suas publicações.
+- 🔍 **Pesquisa com Filtros**: Uma funcionalidade de pesquisa avançada permitirá aos usuários encontrar publicações específicas ou outros usuários com base em diferentes critérios.
+- 📄 **Feed de Publicações**: Os usuários terão acesso a um feed personalizado, exibindo as publicações de quem eles seguem.
+- 📚 **Swagger**: Utilizaremos o Swagger para documentar e facilitar o consumo da API, tornando-a mais acessível e amigável.
+- 🧪 **Testes**: Implementaremos testes automatizados para garantir a confiabilidade e a qualidade do sistema.
 
 ## Funcionalidades já desenvolvidas
 Até o momento,  já foi desenvolvido:
 
 - ✅ **Cadastro**: Os usuários podem criar suas contas no sistema.
-
 - 🔐 **Login com Autenticação JWT**: A autenticação JWT (JSON Web Tokens) foi implementada para garantir a segurança das contas de usuário.
-
 - 📝 **Nova Publicação**: Os usuários podem criar e compartilhar novas publicações.
+- 💖 **Curtidas**: Os usuários podem expressar seu apreço por publicações curtindo-as.
+- 🔄 **Compartilhamento**: As publicações podem ser compartilhadas, ampliando sua visibilidade para outros usuários.
 
 
 ## Configurações e Recursos Adicionais
