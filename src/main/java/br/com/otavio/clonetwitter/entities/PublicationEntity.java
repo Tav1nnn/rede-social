@@ -30,9 +30,9 @@ public class PublicationEntity implements Serializable {
     @JoinColumn(name = "user_publication")
     private UserEntity user;
 
-    @OneToMany(mappedBy = "publication")
+    @OneToMany(mappedBy = "publication", fetch = FetchType.LAZY)
     private List<LikeEntity> likes;
 
-    @OneToMany(mappedBy = "publication")
+    @OneToMany(mappedBy = "publication", fetch = FetchType.LAZY)
     private List<ShareEntity> shares;
 }

@@ -41,7 +41,9 @@ public class SecurityConfig {
                                         "/api/user/v1/findbyid/**",
                                         "api/publication/v1/",
                                         "api/like/v1/**",
+                                        "api/comment/v1/**",
                                         "api/share/v1/**"
+
                                         ).authenticated()
                 )
                 .cors()
