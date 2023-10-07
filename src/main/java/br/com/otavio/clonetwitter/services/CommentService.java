@@ -8,6 +8,7 @@ import br.com.otavio.clonetwitter.mapper.DozerMapper;
 import br.com.otavio.clonetwitter.repositories.CommentRepository;
 import br.com.otavio.clonetwitter.repositories.PublicationRepository;
 import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,6 @@ public class CommentService {
     private UserService userService;
 
     public void newComment(CommentInsertDto commentInsertDto) {
-        System.out.println("teste");
         CommentEntity commentEntity = new CommentEntity();
 
         commentEntity.setContent(commentInsertDto.content());
@@ -57,7 +57,15 @@ public class CommentService {
     }
 
     public CommentEntity findById(Long id) {
-        return commentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("id not found"));
+        System.out.println("teste");
+
+        CommentEntity entity= commentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(""));
+
+        entity.setUserEntity(entity.getUserEntity());
+
+        System.out.println(entity.getUserEntity().getUsername());
+        System.out.println("teste");
+        return entity;
     }
 }
 

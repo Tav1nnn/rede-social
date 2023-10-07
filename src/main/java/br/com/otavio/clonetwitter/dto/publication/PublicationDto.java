@@ -1,6 +1,7 @@
 package br.com.otavio.clonetwitter.dto.publication;
 
 import br.com.otavio.clonetwitter.dto.user.UserDto;
+import br.com.otavio.clonetwitter.dto.user.UsernameDto;
 import br.com.otavio.clonetwitter.entities.LikeEntity;
 import br.com.otavio.clonetwitter.entities.ShareEntity;
 import br.com.otavio.clonetwitter.entities.UserEntity;
@@ -21,7 +22,6 @@ public class PublicationDto {
     private Long id;
     private String caption;
     private Date create_at;
-    private UserDto user;
-    private List<LikeEntity> likes;
-    private List<ShareEntity> shares;
+    private UsernameDto user;
+
 }
