@@ -3,6 +3,7 @@ package br.com.otavio.clonetwitter.controllers;
 import br.com.otavio.clonetwitter.dto.publication.NewPublicationDto;
 import br.com.otavio.clonetwitter.dto.publication.PublicationDto;
 import br.com.otavio.clonetwitter.dto.publication.PublicationLikeDto;
+import br.com.otavio.clonetwitter.dto.publication.PublicationShareDto;
 import br.com.otavio.clonetwitter.services.PublicationService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,12 @@ public class PublicationController {
         PublicationLikeDto publicationLikeDto = publicationService.findByIdWithLike(id);
 
         return ResponseEntity.ok().body(publicationLikeDto);
+    }
+
+    @GetMapping("/share/{id}")
+    public ResponseEntity<PublicationShareDto> findByIdWithShare(@PathVariable Long id) {
+        PublicationShareDto publicationShareDto = publicationService.findByIdWithShare(id);
+
+        return ResponseEntity.ok().body(publicationShareDto);
     }
 }
