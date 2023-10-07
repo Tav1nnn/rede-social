@@ -5,8 +5,6 @@ Este é um projeto pessoal que visa criar uma API de rede social de publicaçõe
 
 ## Funcionalidades a serem desenvolvidas
 O sistema contará com uma variedade de funcionalidades, tornando a experiência do usuário rica e envolvente:
-
-- 💬 **Comentários**: Os usuários têm a capacidade de comentar nas publicações, permitindo discussões e interações significativas.
   
 - 📣 **Notificações**: Os usuários receberão notificações sobre atividades relevantes, como curtidas e comentários em suas publicações.
   
@@ -32,6 +30,8 @@ Até o momento,  já foi desenvolvido:
 - 💖 **Curtidas**: Os usuários podem expressar seu apreço por publicações curtindo-as.
   
 - 🔄 **Compartilhamento**: As publicações podem ser compartilhadas, ampliando sua visibilidade para outros usuários.
+  
+- 💬 **Comentários**: Os usuários têm a capacidade de comentar nas publicações, permitindo discussões e interações significativas.
 
 
 ## Configurações e Recursos Adicionais
