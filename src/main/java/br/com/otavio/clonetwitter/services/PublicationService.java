@@ -1,16 +1,17 @@
 package br.com.otavio.clonetwitter.services;
 
-import br.com.otavio.clonetwitter.dto.publication.NewPublicationDto;
-import br.com.otavio.clonetwitter.dto.publication.PublicationDto;
-import br.com.otavio.clonetwitter.dto.publication.PublicationLikeDto;
-import br.com.otavio.clonetwitter.dto.publication.PublicationShareDto;
+import br.com.otavio.clonetwitter.dto.NumberOfInteractionsDTO;
+import br.com.otavio.clonetwitter.dto.publication.*;
 import br.com.otavio.clonetwitter.dto.user.UsernameDto;
 import br.com.otavio.clonetwitter.entities.LikeEntity;
 import br.com.otavio.clonetwitter.entities.PublicationEntity;
 import br.com.otavio.clonetwitter.entities.ShareEntity;
 import br.com.otavio.clonetwitter.entities.UserEntity;
 import br.com.otavio.clonetwitter.mapper.DozerMapper;
+import br.com.otavio.clonetwitter.repositories.CommentRepository;
+import br.com.otavio.clonetwitter.repositories.LikeRepository;
 import br.com.otavio.clonetwitter.repositories.PublicationRepository;
+import br.com.otavio.clonetwitter.repositories.ShareRepository;
 import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,16 @@ public class PublicationService {
 
     @Autowired
     private PublicationRepository publicationRepository;
+
+    @Autowired
+    private LikeRepository likeRepository;
+
+    @Autowired
+    private ShareRepository shareRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
 
     @Autowired
     private UserService userService;
@@ -45,6 +56,7 @@ public class PublicationService {
     }
 
     public PublicationLikeDto findByIdWithLike(Long id) {
+
         PublicationEntity entity = publicationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Id not found"));
 
@@ -56,6 +68,33 @@ public class PublicationService {
                 .orElseThrow(() -> new ResourceNotFoundException("Id not found"));
 
         return publicationEntityToPublicationShareDto(entity);
+    }
+
+    public PublicationInteractionsNumberDTO findByIdWithInteractionsNumber(Long id) {
+        PublicationEntity entity = publicationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Id not found"));
+
+        return publicationEntityToPublicationInteractionsNumberDTO(entity);
+    }
+
+    private PublicationInteractionsNumberDTO publicationEntityToPublicationInteractionsNumberDTO(PublicationEntity entity) {
+        PublicationInteractionsNumberDTO dto = new PublicationInteractionsNumberDTO();
+
+        dto.setId(entity.getId());
+        dto.setCaption(entity.getCaption());
+        dto.setCreate_at(entity.getCreate_at());
+        UsernameDto usernameDto = new UsernameDto(entity.getUser().getUsername());
+        dto.setUser(usernameDto);
+
+        NumberOfInteractionsDTO numberOfInteractionsDTO = new NumberOfInteractionsDTO(
+                likeRepository.countByPublication(entity),
+                shareRepository.countByPublication(entity),
+                commentRepository.countByPublicationEntity(entity)
+        );
+
+        dto.setNumberOfInteractionsDTO(numberOfInteractionsDTO);
+
+        return dto;
     }
 
     private UserEntity getUserEntityFromService() {

@@ -36,8 +36,6 @@ public class CommentEntity {
     @JoinColumn(name = "user_comment")
     private UserEntity userEntity;
 
-    @JsonIgnore
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publication_comment")
     private PublicationEntity publicationEntity;

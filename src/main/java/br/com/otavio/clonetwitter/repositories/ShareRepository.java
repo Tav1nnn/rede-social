@@ -10,4 +10,5 @@ import java.util.Optional;
 
 public interface ShareRepository extends JpaRepository<ShareEntity, Long> {
     Optional<ShareEntity> findByUserAndPublication(UserEntity user, PublicationEntity publication);
+    long countByPublication(PublicationEntity publication);
 }
