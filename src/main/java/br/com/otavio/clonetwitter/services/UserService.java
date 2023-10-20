@@ -97,8 +97,18 @@ public class UserService {
 
             entity = optional.orElseThrow(() -> new ResourceNotFoundException("User not found"));
         }
+        System.out.println("service user " + entity.getId());
 
-        return DozerMapper.parseObject(entity, UserDto.class);
+        UserDto dto = new UserDto(
+                entity.getId(),
+                entity.getUsername(),
+                entity.getEmail(),
+                entity.getCep(),
+                entity.getBirthday(),
+                entity.getBiography()
+        );
+
+        return dto;
     }
 
     private UserDto toDto(UserEntity entity) {
