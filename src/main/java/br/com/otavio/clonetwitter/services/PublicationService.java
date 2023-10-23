@@ -13,7 +13,6 @@ import br.com.otavio.clonetwitter.repositories.LikeRepository;
 import br.com.otavio.clonetwitter.repositories.PublicationRepository;
 import br.com.otavio.clonetwitter.repositories.ShareRepository;
 import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +34,8 @@ public class PublicationService {
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
+    private CommentService commentService;
 
     @Autowired
     private UserService userService;
@@ -77,6 +78,37 @@ public class PublicationService {
         return publicationEntityToPublicationInteractionsNumberDTO(entity);
     }
 
+    public PublicationCommentDto findByIdWithComment(Long idPublication) {
+        PublicationEntity entity = publicationRepository.findById(idPublication)
+                .orElseThrow(() -> new ResourceNotFoundException("id no found"));
+
+        return publicatinEntityToPublicationCommentDto(entity);
+    }
+
+    private UserEntity getUserEntityFromService() {
+        return DozerMapper.parseObject(userService.getUser(), UserEntity.class);
+    }
+
+    private PublicationEntity createPublicationEntity(NewPublicationDto publicationDto) {
+        PublicationEntity publicationEntity = new PublicationEntity();
+        publicationEntity.setCaption(publicationDto.caption());
+        publicationEntity.setCreate_at(new Date(new java.util.Date().getTime()));
+        return publicationEntity;
+    }
+
+    private PublicationDto publicationEntityToPublicationDto(PublicationEntity publicationEntity) {
+        PublicationDto publicationDto = new PublicationDto();
+        publicationDto.setId(publicationEntity.getId());
+        publicationDto.setCaption(publicationEntity.getCaption());
+        publicationDto.setCreate_at(publicationEntity.getCreate_at());
+        UsernameDto usernameDto = new UsernameDto(publicationEntity.getUser().getUsername());
+        publicationDto.setUser(usernameDto);
+
+        return publicationDto;
+    }
+
+    //tudo esses metodos precisam de um mapper
+
     private PublicationInteractionsNumberDTO publicationEntityToPublicationInteractionsNumberDTO(PublicationEntity entity) {
         PublicationInteractionsNumberDTO dto = new PublicationInteractionsNumberDTO();
 
@@ -95,29 +127,6 @@ public class PublicationService {
         dto.setNumberOfInteractionsDTO(numberOfInteractionsDTO);
 
         return dto;
-    }
-
-    private UserEntity getUserEntityFromService() {
-        return DozerMapper.parseObject(userService.getUser(), UserEntity.class);
-    }
-
-    private PublicationEntity createPublicationEntity(NewPublicationDto publicationDto) {
-        PublicationEntity publicationEntity = new PublicationEntity();
-        publicationEntity.setCaption(publicationDto.caption());
-        publicationEntity.setCreate_at(new Date(new java.util.Date().getTime()));
-        return publicationEntity;
-    }
-
-    private PublicationDto publicationEntityToPublicationDto(PublicationEntity publicationEntity) {
-        PublicationDto publicationDto = new PublicationDto();
-
-        publicationDto.setId(publicationEntity.getId());
-        publicationDto.setCaption(publicationEntity.getCaption());
-        publicationDto.setCreate_at(publicationEntity.getCreate_at());
-        UsernameDto usernameDto = new UsernameDto(publicationEntity.getUser().getUsername());
-        publicationDto.setUser(usernameDto);
-
-        return publicationDto;
     }
 
     private PublicationLikeDto publicationEntityToPublicationLikeDto(PublicationEntity entity) {
@@ -156,5 +165,19 @@ public class PublicationService {
         }
 
         return publicationShareDto;
+    }
+
+    private PublicationCommentDto publicatinEntityToPublicationCommentDto(PublicationEntity entity) {
+        PublicationCommentDto dto = new PublicationCommentDto();
+
+        dto.setId(entity.getId());
+        dto.setCaption(entity.getCaption());
+        dto.setCreate_at(entity.getCreate_at());
+        UsernameDto usernameDto = new UsernameDto(entity.getUser().getUsername());
+        dto.setUser(usernameDto);
+
+        dto.setListCommentDto(commentService.listComment(dto.getId()));
+
+        return dto;
     }
 }

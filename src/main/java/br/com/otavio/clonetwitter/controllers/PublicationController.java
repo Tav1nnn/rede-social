@@ -41,6 +41,13 @@ public class PublicationController {
         return ResponseEntity.ok().body(publicationShareDto);
     }
 
+    @GetMapping("/comment/{id}")
+    public ResponseEntity<PublicationCommentDto> findByIdWithComment(@PathVariable Long id) {
+        PublicationCommentDto dto = publicationService.findByIdWithComment(id);
+
+        return ResponseEntity.ok().body(dto);
+    }
+
     @GetMapping("/interactionsNumber/{id}")
     public ResponseEntity<PublicationInteractionsNumberDTO> findByIdWithInteractionsNumber(@PathVariable Long id) {
         PublicationInteractionsNumberDTO dto = publicationService.findByIdWithInteractionsNumber(id);

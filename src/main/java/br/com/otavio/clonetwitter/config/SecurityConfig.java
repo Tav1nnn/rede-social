@@ -34,12 +34,12 @@ public class SecurityConfig {
                                 .requestMatchers(
                                         "/api/user/v1/register",
                                         "/api/user/v1/login",
+                                        "api/publication/v1/**",
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**"
                                         ).permitAll()
                                 .requestMatchers(
                                         "/api/user/v1/findbyid/**",
-                                        "api/publication/v1/**",
                                         "api/like/v1/**",
                                         "api/comment/v1/**",
                                         "api/share/v1/**"

@@ -1,15 +1,14 @@
 package br.com.otavio.clonetwitter.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 @Entity(name = "role")
 @Data
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoleEntity implements Serializable {
@@ -21,4 +20,11 @@ public class RoleEntity implements Serializable {
 
     private String name;
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

@@ -31,8 +31,8 @@ public class CommentController {
         return ResponseEntity.ok().body(commentService.findById(id));
     }
 
-    @GetMapping(value = "/teste/{id}")
-    public ResponseEntity<List<CommentListDto>> teste (@PathVariable Long id) {
-        return ResponseEntity.ok().body(commentService.teste(id));
+    @GetMapping(value = "/listComment/{id}")
+    public ResponseEntity<List<CommentListDto>> listCommet (@PathVariable Long idPublication) {
+        return ResponseEntity.ok().body(commentService.listComment(idPublication));
     }
 }

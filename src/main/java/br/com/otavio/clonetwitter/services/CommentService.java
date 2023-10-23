@@ -51,11 +51,7 @@ public class CommentService {
 
         UserDto userDto = userService.getUser();
 
-        System.out.println(userDto.getKey());
-
         UserEntity userEntity = DozerMapper.parseObject(userDto, UserEntity.class);
-
-        System.out.println(userEntity.getUsername());
 
         commentEntity.setUserEntity(userEntity);
 
@@ -76,8 +72,8 @@ public class CommentService {
         return entity;
     }
 
-    public List<CommentListDto> teste(Long id) {
-        PublicationEntity publicationEntity = publicationRepository.findById(id).orElseThrow(
+    public List<CommentListDto> listComment(Long idPublication) {
+        PublicationEntity publicationEntity = publicationRepository.findById(idPublication).orElseThrow(
                 () -> new ResourceNotFoundException("id not found")
         );
 
@@ -86,6 +82,7 @@ public class CommentService {
 
         List<CommentListDto> commentDtoList = new ArrayList<>();
 
+        //transformar o commentEntityList em CommentDtoList
         for(CommentEntity entity : commentEntityList){
             CommentListDto dto = new CommentListDto();
             dto.setId(entity.getId());
