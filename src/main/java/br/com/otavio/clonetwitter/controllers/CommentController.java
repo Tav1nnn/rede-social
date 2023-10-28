@@ -5,6 +5,7 @@ import br.com.otavio.clonetwitter.dto.comment.CommentListDto;
 import br.com.otavio.clonetwitter.entities.CommentEntity;
 import br.com.otavio.clonetwitter.services.CommentService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping(value = "/newComment")
-    public void newComment(@RequestBody CommentInsertDto commentInsertDto, HttpServletResponse response) {
+    public void newComment(@RequestBody  @Valid  CommentInsertDto commentInsertDto, HttpServletResponse response) {
         System.out.println("teste");
         commentService.newComment(commentInsertDto);
         response.setStatus(HttpServletResponse.SC_CREATED);

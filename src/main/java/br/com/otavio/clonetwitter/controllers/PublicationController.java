@@ -3,6 +3,7 @@ package br.com.otavio.clonetwitter.controllers;
 import br.com.otavio.clonetwitter.dto.publication.*;
 import br.com.otavio.clonetwitter.services.PublicationService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class PublicationController {
     private PublicationService publicationService;
 
     @PostMapping(value = "/create")
-    public void createNewPublication(@RequestBody NewPublicationDto newPublicationDto, HttpServletResponse response) {
+    public void createNewPublication(@RequestBody @Valid NewPublicationDto newPublicationDto, HttpServletResponse response) {
         publicationService.createNewPublication(newPublicationDto);
         response.setStatus(HttpServletResponse.SC_CREATED);
     }

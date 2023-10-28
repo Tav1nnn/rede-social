@@ -1,6 +1,7 @@
 package br.com.otavio.clonetwitter.dto.publication;
 
 import br.com.otavio.clonetwitter.dto.comment.CommentListDto;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,5 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PublicationCommentDto extends PublicationDto{
+
+    @NotNull(message = "listComment field cannot be null")
     private List<CommentListDto> listCommentDto;
 }

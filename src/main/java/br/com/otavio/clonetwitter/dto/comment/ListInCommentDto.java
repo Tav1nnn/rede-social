@@ -1,12 +1,11 @@
 package br.com.otavio.clonetwitter.dto.comment;
 
-import br.com.otavio.clonetwitter.dto.user.UsernameDto;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
 import java.util.List;
 
 @Getter
@@ -14,5 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListInCommentDto {
+
+    @NotNull(message = "listCommentDto field cannot be null")
     private List<CommentListDto> listCommentDto;
 }
