@@ -1,5 +1,8 @@
 package br.com.otavio.clonetwitter.services;
 
+import br.com.otavio.clonetwitter.controllers.CommentController;
+import br.com.otavio.clonetwitter.controllers.UserController;
+import br.com.otavio.clonetwitter.dto.comment.CommentDto;
 import br.com.otavio.clonetwitter.dto.comment.CommentInsertDto;
 import br.com.otavio.clonetwitter.dto.comment.CommentListDto;
 import br.com.otavio.clonetwitter.dto.user.UserDto;
@@ -7,6 +10,7 @@ import br.com.otavio.clonetwitter.dto.user.UsernameDto;
 import br.com.otavio.clonetwitter.entities.CommentEntity;
 import br.com.otavio.clonetwitter.entities.PublicationEntity;
 import br.com.otavio.clonetwitter.entities.UserEntity;
+import br.com.otavio.clonetwitter.mapper.CommentMapper;
 import br.com.otavio.clonetwitter.mapper.DozerMapper;
 import br.com.otavio.clonetwitter.repositories.CommentRepository;
 import br.com.otavio.clonetwitter.repositories.PublicationRepository;
@@ -15,8 +19,12 @@ import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.*;
 import java.sql.Date;
 import java.util.*;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class CommentService {
@@ -29,6 +37,19 @@ public class CommentService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CommentMapper commentMapper;
+
+    public CommentDto findById(Long id) {
+        CommentEntity entity = commentRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("id not found: " + id)
+        );
+        CommentDto commentDto = commentMapper.toCommentDto(entity);
+
+        commentDto.add(linkTo(methodOn(CommentController.class).findById(id)).withSelfRel());
+        return commentDto;
+    }
 
     public void newComment(CommentInsertDto commentInsertDto) {
         CommentEntity commentEntity = new CommentEntity();
@@ -60,18 +81,6 @@ public class CommentService {
         commentRepository.save(commentEntity);
     }
 
-    public CommentEntity findById(Long id) {
-        System.out.println("teste");
-
-        CommentEntity entity= commentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(""));
-
-        entity.setUserEntity(entity.getUserEntity());
-
-        System.out.println(entity.getUserEntity().getUsername());
-        System.out.println("teste");
-        return entity;
-    }
-
     public List<CommentListDto> listComment(Long idPublication) {
         PublicationEntity publicationEntity = publicationRepository.findById(idPublication).orElseThrow(
                 () -> new ResourceNotFoundException("id not found")
@@ -84,14 +93,10 @@ public class CommentService {
 
         //transformar o commentEntityList em CommentDtoList
         for(CommentEntity entity : commentEntityList){
-            CommentListDto dto = new CommentListDto();
-            dto.setId(entity.getId());
-            dto.setLayer(entity.getLayer());
-            dto.setDate(entity.getDate());
-            dto.setContent(entity.getContent());
-            dto.setIdFather(entity.getIdFather());
-            UsernameDto userDto = new UsernameDto(entity.getUserEntity().getUsername());
+            CommentListDto dto = commentMapper.toCommentiListDto(entity);
+            UsernameDto userDto = newUsernameDto(entity.getUserEntity().getUsername(), entity.getUserEntity().getId());
             dto.setUsernameDto(userDto);
+            dto.add(linkTo(methodOn(CommentController.class).findById(dto.getKey())).withSelfRel());
             commentDtoList.add(dto);
         }
 
@@ -99,7 +104,7 @@ public class CommentService {
         List<CommentListDto> commentArborList = new ArrayList<>();
 
         for (CommentListDto dto : commentDtoList) {
-            commentMap.put(dto.getId(), dto);
+            commentMap.put(dto.getKey(), dto);
 
             if (dto.getIdFather() == 0) {
                 commentArborList.add(dto);
@@ -116,6 +121,13 @@ public class CommentService {
         return commentArborList;
     }
 
+    private UsernameDto newUsernameDto(String username, Long id) {
+        UsernameDto usernameDto = new UsernameDto();
+        usernameDto.setUsername(username);
+        usernameDto.add(linkTo(methodOn(UserController.class).findById(id)).withSelfRel());
+
+        return usernameDto;
+    }
 }
 
 

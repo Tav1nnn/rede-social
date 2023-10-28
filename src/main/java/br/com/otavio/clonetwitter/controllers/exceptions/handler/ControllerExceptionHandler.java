@@ -2,10 +2,7 @@ package br.com.otavio.clonetwitter.controllers.exceptions.handler;
 
 import br.com.otavio.clonetwitter.controllers.exceptions.model.StandardError;
 import br.com.otavio.clonetwitter.controllers.exceptions.model.ValidationError;
-import br.com.otavio.clonetwitter.services.exceptions.InvalidJwtAuthenticationException;
-import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
-import br.com.otavio.clonetwitter.services.exceptions.UserAlreadyLikedException;
-import br.com.otavio.clonetwitter.services.exceptions.UserAlreadyShareException;
+import br.com.otavio.clonetwitter.services.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +49,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(InvalidJwtAuthenticationException.class)
     public ResponseEntity<StandardError> invalidJwtAuthenticationException(InvalidJwtAuthenticationException e, HttpServletRequest request) {
         StandardError err = new StandardError();
-
+        System.out.println("asflkdfjasd");
         err.setTimestamp(Instant.now());
         err.setStatus(HttpStatus.BAD_REQUEST.value());
         err.setError("Invalid Token");
@@ -85,4 +82,5 @@ public class ControllerExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
+
 }

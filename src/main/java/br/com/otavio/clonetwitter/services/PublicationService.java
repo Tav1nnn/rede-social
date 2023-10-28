@@ -1,5 +1,6 @@
 package br.com.otavio.clonetwitter.services;
 
+import br.com.otavio.clonetwitter.controllers.PublicationController;
 import br.com.otavio.clonetwitter.controllers.UserController;
 import br.com.otavio.clonetwitter.dto.NumberOfInteractionsDTO;
 import br.com.otavio.clonetwitter.dto.publication.*;
@@ -120,7 +121,7 @@ public class PublicationService {
     private PublicationDto publicationEntityToPublicationDto(PublicationEntity publicationEntity) {
         PublicationDto publicationDto = publicationMapper.toPublicationDto(publicationEntity);
         publicationDto.setUser(newUsernameDto(publicationEntity.getUser().getUsername(), publicationEntity.getUser().getId()));
-        publicationDto.add(linkTo(methodOn(UserController.class).findById(publicationDto.getKey())).withSelfRel());
+        publicationDto.add(linkTo(methodOn(PublicationController.class).findById(publicationDto.getKey())).withSelfRel());
         return publicationDto;
     }
 
@@ -132,6 +133,7 @@ public class PublicationService {
             publicationLikeDto.getUsernameOfLikeList().add(newUsernameDto(likeEntity.getUser().getUsername(), likeEntity.getUser().getId()));
         }
 
+        publicationLikeDto.add(linkTo(methodOn(PublicationController.class).findById(publicationLikeDto.getKey())).withSelfRel());
         return publicationLikeDto;
     }
 
@@ -142,7 +144,7 @@ public class PublicationService {
         for(ShareEntity shareEntity: entity.getShares()){
             publicationShareDto.getUsernameOfLikeList().add(newUsernameDto(shareEntity.getUser().getUsername(), shareEntity.getUser().getId()));
         }
-
+        publicationShareDto.add(linkTo(methodOn(PublicationController.class).findById(publicationShareDto.getKey())).withSelfRel());
         return publicationShareDto;
     }
 
@@ -150,6 +152,7 @@ public class PublicationService {
         PublicationCommentDto dto = publicationMapper.toPublicationCommentDto(entity);
         dto.setUser(newUsernameDto(entity.getUser().getUsername(), entity.getId()));
         dto.setListCommentDto(commentService.listComment(dto.getKey()));
+        dto.add(linkTo(methodOn(PublicationController.class).findById(dto.getKey())).withSelfRel());
         return dto;
     }
 
@@ -163,6 +166,7 @@ public class PublicationService {
                 commentRepository.countByPublicationEntity(entity)
         );
         dto.setNumberOfInteractionsDTO(numberOfInteractionsDTO);
+        dto.add(linkTo(methodOn(PublicationController.class).findById(dto.getKey())).withSelfRel());
         return dto;
     }
 

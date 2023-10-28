@@ -109,9 +109,10 @@ public class JwtService {
         return null;
     }
 
-    public boolean validateToken(String token) throws InvalidJwtAuthenticationException {
-        DecodedJWT decodedJWT = decodedToken(token);
+    public boolean validateToken(String token) {
+
         try {
+            DecodedJWT decodedJWT = decodedToken(token);
             if (decodedJWT.getExpiresAt().before(new Date())) {
                 return false;
             }

@@ -35,7 +35,7 @@ public class JwtFilter extends GenericFilterBean{
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             }
-        } catch (InvalidJwtAuthenticationException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 

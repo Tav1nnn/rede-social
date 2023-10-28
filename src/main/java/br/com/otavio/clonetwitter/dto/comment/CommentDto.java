@@ -1,6 +1,8 @@
 package br.com.otavio.clonetwitter.dto.comment;
 
 import br.com.otavio.clonetwitter.dto.user.UsernameDto;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.sql.Date;
 
@@ -17,8 +20,10 @@ import java.sql.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentDto {
-    private Long id;
+@JsonPropertyOrder({"id", "content", "idFather", "layer", "date", "user"})
+public class CommentDto extends RepresentationModel<CommentDto> {
+    @JsonProperty("id")
+    private Long key;
 
     @NotBlank(message = "content field cannot be null")
     private String content;
@@ -35,6 +40,7 @@ public class CommentDto {
     @NotNull(message = "birthday field cannot be null")
     private Date date;
 
+    @JsonProperty("user")
     @NotNull(message = "birthday field cannot be null")
     private UsernameDto usernameDto;
 }

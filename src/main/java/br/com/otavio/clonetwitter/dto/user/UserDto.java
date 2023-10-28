@@ -38,7 +38,7 @@ public class UserDto extends RepresentationModel<UserDto> implements Serializabl
     private String cep;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @PastOrPresent(message = "cannot use a future date")
+
     @NotNull(message = "birthday field cannot be null")
     private Date birthday;
 

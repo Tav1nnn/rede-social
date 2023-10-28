@@ -1,5 +1,6 @@
 package br.com.otavio.clonetwitter.controllers;
 
+import br.com.otavio.clonetwitter.dto.comment.CommentDto;
 import br.com.otavio.clonetwitter.dto.comment.CommentInsertDto;
 import br.com.otavio.clonetwitter.dto.comment.CommentListDto;
 import br.com.otavio.clonetwitter.entities.CommentEntity;
@@ -20,16 +21,16 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    @GetMapping(value = "/{id}")//isso de retornar a entidade e provisorio :)
+    public ResponseEntity<CommentDto> findById(@PathVariable Long id){
+        return ResponseEntity.ok().body(commentService.findById(id));
+    }
+
     @PostMapping(value = "/newComment")
     public void newComment(@RequestBody  @Valid  CommentInsertDto commentInsertDto, HttpServletResponse response) {
         System.out.println("teste");
         commentService.newComment(commentInsertDto);
         response.setStatus(HttpServletResponse.SC_CREATED);
-    }
-
-    @GetMapping(value = "/{id}")//isso de retornar a entidade e provisorio :)
-    public ResponseEntity<CommentEntity> findById(@PathVariable Long id){
-        return ResponseEntity.ok().body(commentService.findById(id));
     }
 
     @GetMapping(value = "/listComment/{id}")
