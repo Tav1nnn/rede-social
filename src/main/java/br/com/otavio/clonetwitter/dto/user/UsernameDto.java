@@ -1,4 +1,12 @@
 package br.com.otavio.clonetwitter.dto.user;
 
-public record UsernameDto(String username) {
+import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class UsernameDto extends RepresentationModel<UsernameDto> {
+    private String username;
 }
