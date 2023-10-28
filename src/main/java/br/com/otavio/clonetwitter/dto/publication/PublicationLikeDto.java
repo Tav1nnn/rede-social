@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -16,5 +17,5 @@ import java.util.List;
 @AllArgsConstructor
 public class PublicationLikeDto extends PublicationDto{
     @JsonProperty("likes")
-    private List<UsernameDto> usernameOfLikeList;
+    private List<UsernameDto> usernameOfLikeList = new ArrayList<>();
 }

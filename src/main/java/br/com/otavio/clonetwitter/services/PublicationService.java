@@ -8,6 +8,7 @@ import br.com.otavio.clonetwitter.entities.PublicationEntity;
 import br.com.otavio.clonetwitter.entities.ShareEntity;
 import br.com.otavio.clonetwitter.entities.UserEntity;
 import br.com.otavio.clonetwitter.mapper.DozerMapper;
+import br.com.otavio.clonetwitter.mapper.PublicationMapper;
 import br.com.otavio.clonetwitter.repositories.CommentRepository;
 import br.com.otavio.clonetwitter.repositories.LikeRepository;
 import br.com.otavio.clonetwitter.repositories.PublicationRepository;
@@ -40,6 +41,20 @@ public class PublicationService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PublicationMapper publicationMapper;
+
+    public PublicationService(PublicationRepository publicationRepository, LikeRepository likeRepository, ShareRepository shareRepository,
+                              CommentRepository commentRepository, CommentService commentService, UserService userService, PublicationMapper publicationMapper) {
+        this.publicationRepository = publicationRepository;
+        this.likeRepository = likeRepository;
+        this.shareRepository = shareRepository;
+        this.commentRepository = commentRepository;
+        this.commentService = commentService;
+        this.userService = userService;
+        this.publicationMapper = publicationMapper;
+    }
+
     public void createNewPublication(NewPublicationDto publicationDto){
         PublicationEntity publicationEntity = createPublicationEntity(publicationDto);
         UserEntity userEntity = getUserEntityFromService();
@@ -71,13 +86,6 @@ public class PublicationService {
         return publicationEntityToPublicationShareDto(entity);
     }
 
-    public PublicationInteractionsNumberDTO findByIdWithInteractionsNumber(Long id) {
-        PublicationEntity entity = publicationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Id not found"));
-
-        return publicationEntityToPublicationInteractionsNumberDTO(entity);
-    }
-
     public PublicationCommentDto findByIdWithComment(Long idPublication) {
         PublicationEntity entity = publicationRepository.findById(idPublication)
                 .orElseThrow(() -> new ResourceNotFoundException("id no found"));
@@ -85,9 +93,14 @@ public class PublicationService {
         return publicatinEntityToPublicationCommentDto(entity);
     }
 
-    private UserEntity getUserEntityFromService() {
-        return DozerMapper.parseObject(userService.getUser(), UserEntity.class);
+    public PublicationInteractionsNumberDTO findByIdWithInteractionsNumber(Long id) {
+        PublicationEntity entity = publicationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Id not found"));
+
+        return publicationEntityToPublicationInteractionsNumberDTO(entity);
     }
+
+
 
     private PublicationEntity createPublicationEntity(NewPublicationDto publicationDto) {
         PublicationEntity publicationEntity = new PublicationEntity();
@@ -96,88 +109,60 @@ public class PublicationService {
         return publicationEntity;
     }
 
-    private PublicationDto publicationEntityToPublicationDto(PublicationEntity publicationEntity) {
-        PublicationDto publicationDto = new PublicationDto();
-        publicationDto.setId(publicationEntity.getId());
-        publicationDto.setCaption(publicationEntity.getCaption());
-        publicationDto.setCreate_at(publicationEntity.getCreate_at());
-        UsernameDto usernameDto = new UsernameDto(publicationEntity.getUser().getUsername());
-        publicationDto.setUser(usernameDto);
+    private UserEntity getUserEntityFromService() {
+        return DozerMapper.parseObject(userService.getUser(), UserEntity.class);
+    }
 
+    private PublicationDto publicationEntityToPublicationDto(PublicationEntity publicationEntity) {
+        PublicationDto publicationDto = publicationMapper.toPublicationDto(publicationEntity);
+        publicationDto.setUser(newUsernameDto(publicationEntity.getUser().getUsername()));
         return publicationDto;
     }
 
-    //tudo esses metodos precisam de um mapper
-
-    private PublicationInteractionsNumberDTO publicationEntityToPublicationInteractionsNumberDTO(PublicationEntity entity) {
-        PublicationInteractionsNumberDTO dto = new PublicationInteractionsNumberDTO();
-
-        dto.setId(entity.getId());
-        dto.setCaption(entity.getCaption());
-        dto.setCreate_at(entity.getCreate_at());
-        UsernameDto usernameDto = new UsernameDto(entity.getUser().getUsername());
-        dto.setUser(usernameDto);
-
-        NumberOfInteractionsDTO numberOfInteractionsDTO = new NumberOfInteractionsDTO(
-                likeRepository.countByPublication(entity),
-                shareRepository.countByPublication(entity),
-                commentRepository.countByPublicationEntity(entity)
-        );
-
-        dto.setNumberOfInteractionsDTO(numberOfInteractionsDTO);
-
-        return dto;
-    }
-
     private PublicationLikeDto publicationEntityToPublicationLikeDto(PublicationEntity entity) {
-        PublicationLikeDto publicationLikeDto = new PublicationLikeDto();
-
-        publicationLikeDto.setId(entity.getId());
-        publicationLikeDto.setCaption(entity.getCaption());
-        publicationLikeDto.setCreate_at(entity.getCreate_at());
-        UsernameDto usernameDto = new UsernameDto(entity.getUser().getUsername());
-        publicationLikeDto.setUser(usernameDto);
-
-        publicationLikeDto.setUsernameOfLikeList(new ArrayList<>());
+        PublicationLikeDto publicationLikeDto = publicationMapper.toPublicationLikeDto(entity);
+        publicationLikeDto.setUser(newUsernameDto(entity.getUser().getUsername()));
 
         for(LikeEntity likeEntity : entity.getLikes()){
-            UsernameDto usernameDtoOfLike = new UsernameDto(likeEntity.getUser().getUsername());
-            publicationLikeDto.getUsernameOfLikeList().add(usernameDtoOfLike);
+            publicationLikeDto.getUsernameOfLikeList().add(newUsernameDto(likeEntity.getUser().getUsername()));
         }
 
         return publicationLikeDto;
     }
 
     private PublicationShareDto publicationEntityToPublicationShareDto(PublicationEntity entity) {
-        PublicationShareDto publicationShareDto = new PublicationShareDto();
-
-        publicationShareDto.setId(entity.getId());
-        publicationShareDto.setCaption(entity.getCaption());
-        publicationShareDto.setCreate_at(entity.getCreate_at());
-        UsernameDto usernameDto = new UsernameDto(entity.getUser().getUsername());
-        publicationShareDto.setUser(usernameDto);
-
-        publicationShareDto.setUsernameOfLikeList(new ArrayList<>());
+        PublicationShareDto publicationShareDto = publicationMapper.toPublicationShareDto(entity);
+        publicationShareDto.setUser(newUsernameDto(entity.getUser().getUsername()));
 
         for(ShareEntity shareEntity: entity.getShares()){
-            UsernameDto usernameDtoOfLike = new UsernameDto(shareEntity.getUser().getUsername());
-            publicationShareDto.getUsernameOfLikeList().add(usernameDtoOfLike);
+            publicationShareDto.getUsernameOfLikeList().add(newUsernameDto(shareEntity.getUser().getUsername()));
         }
 
         return publicationShareDto;
     }
 
     private PublicationCommentDto publicatinEntityToPublicationCommentDto(PublicationEntity entity) {
-        PublicationCommentDto dto = new PublicationCommentDto();
-
-        dto.setId(entity.getId());
-        dto.setCaption(entity.getCaption());
-        dto.setCreate_at(entity.getCreate_at());
-        UsernameDto usernameDto = new UsernameDto(entity.getUser().getUsername());
-        dto.setUser(usernameDto);
-
+        PublicationCommentDto dto = publicationMapper.toPublicationCommentDto(entity);
+        dto.setUser(newUsernameDto(entity.getUser().getUsername()));
         dto.setListCommentDto(commentService.listComment(dto.getId()));
-
         return dto;
+    }
+
+    private PublicationInteractionsNumberDTO publicationEntityToPublicationInteractionsNumberDTO(PublicationEntity entity) {
+        PublicationInteractionsNumberDTO dto = publicationMapper.toPublicationInteractionsNumberDto(entity)
+        dto.setUser(newUsernameDto(entity.getUser().getUsername()));
+
+        NumberOfInteractionsDTO numberOfInteractionsDTO = new NumberOfInteractionsDTO(
+                likeRepository.countByPublication(entity),
+                shareRepository.countByPublication(entity),
+                commentRepository.countByPublicationEntity(entity)
+        );
+        dto.setNumberOfInteractionsDTO(numberOfInteractionsDTO);
+        return dto;
+    }
+
+
+    private UsernameDto newUsernameDto(String username) {
+        return new UsernameDto(username);
     }
 }
