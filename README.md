@@ -1,5 +1,14 @@
 # Projeto de Rede Social com Spring Boot
 
+
+<div>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" width=50px/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" width=50px/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width=50px/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" height=70px/>
+          
+</div>
+                        
 ## Descrição do Projeto
 Este é um projeto pessoal que visa criar uma API de rede social de publicações, utilizando o poderoso framework Spring Boot. A ideia é desenvolver uma plataforma que permita aos usuários compartilhar suas experiências por meio de publicações, interagir com outras pessoas e explorar um ambiente social dinâmico.
 
