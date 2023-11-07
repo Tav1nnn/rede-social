@@ -1,4 +1,4 @@
-# 🌟 Projeto de Rede Social com Spring Boot 🌟
+# Projeto de Rede Social com Spring Boot
 
 ## Descrição do Projeto
 Este é um projeto pessoal que visa criar uma API de rede social de publicações, utilizando o poderoso framework Spring Boot. A ideia é desenvolver uma plataforma que permita aos usuários compartilhar suas experiências por meio de publicações, interagir com outras pessoas e explorar um ambiente social dinâmico.
@@ -23,7 +23,7 @@ Até o momento,  já foi desenvolvido:
 
 - ✅ **Cadastro**: Os usuários podem criar suas contas no sistema.
   
-- 🔐 **Login com Autenticação JWT**: A autenticação JWT (JSON Web Tokens) foi implementada para garantir a segurança das contas de usuário.]
+- 🔐 **Login com Autenticação JWT**: A autenticação JWT (JSON Web Tokens) foi implementada para garantir a segurança das contas de usuário.
   
 - 📝 **Nova Publicação**: Os usuários podem criar e compartilhar novas publicações.
   
@@ -35,17 +35,16 @@ Até o momento,  já foi desenvolvido:
 
 
 ## Configurações e Recursos Adicionais
-Para uma experiência mais abrangente e segura, estou utilizando os seguintes recursos:
 
-- 🌐 **Banco de Dados MySQL**: Armazenamos os dados do sistema em um banco de dados MySQL robusto e escalável.
+- 🌐 **Banco de Dados MySQL**: Armazenamos os dados do sistema em um banco de dados MySQL
 
-- 📜 **Flyway**: Utilizamos o Flyway para gerenciar e versionar as migrações do banco de dados, garantindo que as atualizações do esquema sejam aplicadas de forma consistente.
+- 📜 **Flyway**: Utilizamos o Flyway para gerenciar e versionar as migrações do banco de dados.
 
 - 🔐 **Spring Security Crypto**: O Spring Security Crypto é empregado para criptografar senhas e dados sensíveis, aumentando a segurança do sistema.
 
-- ✅ **Bean Validation**: Usamos a validação de beans para garantir que os dados fornecidos pelos usuários atendam aos critérios de validação definidos, tornando o sistema mais robusto.
+- ✅ **Bean Validation**: Usamos a validação de beans para garantir que os dados fornecidos pelos usuários atendam aos critérios de validação definidos.
 
-- 🔒 **Auth0 JWT**: A autenticação JWT fornecida pela Auth0 é integrada ao sistema para garantir a segurança das informações e a autenticação de usuários de maneira eficiente e escalável.
+- 🔒 **Auth0 JWT**: A autenticação JWT fornecida pela Auth0 é integrada ao sistema para garantir a segurança das informações e a autenticação de usuários.
 
 
 ## Pré-requisitos
@@ -78,7 +77,7 @@ mvn clean install
 
 3. Inicie o projeto
 ```bash
-mvn clean install
+mvn spring-boot:run
 ```
 
 4. Acesse o projeto pela porta padrão `http://localhost:8080`
