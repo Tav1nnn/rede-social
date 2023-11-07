@@ -3,9 +3,11 @@ package br.com.otavio.clonetwitter.services;
 import br.com.otavio.clonetwitter.dto.TokenDTO;
 import br.com.otavio.clonetwitter.entities.RoleEntity;
 import br.com.otavio.clonetwitter.services.exceptions.InvalidJwtAuthenticationException;
+import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -95,9 +97,14 @@ public class JwtService {
     }
 
     private DecodedJWT decodedToken(String token) {
-        Algorithm alg = Algorithm.HMAC256((secretKey.getBytes()));
-        JWTVerifier verifier = JWT.require(alg).build();
-        return verifier.verify(token);
+        try {
+            Algorithm alg = Algorithm.HMAC256((secretKey.getBytes()));
+            JWTVerifier verifier = JWT.require(alg).build();
+            return verifier.verify(token);
+        }catch (Exception e) {
+            throw new InvalidJwtAuthenticationException(e.getMessage());
+        }
+
     }
 
     public String resolveToken(HttpServletRequest req) {
@@ -110,16 +117,11 @@ public class JwtService {
     }
 
     public boolean validateToken(String token) {
-
-        try {
-            DecodedJWT decodedJWT = decodedToken(token);
-            if (decodedJWT.getExpiresAt().before(new Date())) {
-                return false;
-            }
-            return true;
-        } catch (Exception e) {
-            throw new InvalidJwtAuthenticationException("Expired or invalid JWT token!");
+        DecodedJWT decodedJWT = decodedToken(token);
+        if(decodedJWT.getExpiresAt().before(new Date())) {
+            return false;
         }
+        return true;
     }
 
 }
