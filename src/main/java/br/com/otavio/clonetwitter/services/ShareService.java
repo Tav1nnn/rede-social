@@ -1,14 +1,17 @@
 package br.com.otavio.clonetwitter.services;
 
 
+import br.com.otavio.clonetwitter.dto.publication.PublicationDto;
 import br.com.otavio.clonetwitter.entities.PublicationEntity;
 import br.com.otavio.clonetwitter.entities.ShareEntity;
 import br.com.otavio.clonetwitter.entities.UserEntity;
 import br.com.otavio.clonetwitter.mapper.DozerMapper;
+import br.com.otavio.clonetwitter.mapper.PublicationMapper;
 import br.com.otavio.clonetwitter.repositories.ShareRepository;
 import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
 import br.com.otavio.clonetwitter.services.exceptions.UserAlreadyShareException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -20,10 +23,14 @@ public class ShareService {
     private UserService userService;
 
     @Autowired
+    @Lazy
     private PublicationService publicationService;
 
     @Autowired
     private ShareRepository shareRepository;
+
+    @Autowired
+    private PublicationMapper publicationMapper;
 
     public void createNewShare(Long id) {
         UserEntity userEntity = getUserEntity();
@@ -42,6 +49,11 @@ public class ShareService {
         ShareEntity entity = shareRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id not found"));
 
         shareRepository.delete(entity);
+    }
+
+    public Long countShare(PublicationDto dto) {
+        PublicationEntity entity = publicationMapper.toPublicationEntity(dto);
+        return shareRepository.countByPublication(entity);
     }
 
     private UserEntity getUserEntity() {

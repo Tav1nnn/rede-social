@@ -1,13 +1,16 @@
 package br.com.otavio.clonetwitter.services;
 
+import br.com.otavio.clonetwitter.dto.publication.PublicationDto;
 import br.com.otavio.clonetwitter.entities.LikeEntity;
 import br.com.otavio.clonetwitter.entities.PublicationEntity;
 import br.com.otavio.clonetwitter.entities.UserEntity;
 import br.com.otavio.clonetwitter.mapper.DozerMapper;
+import br.com.otavio.clonetwitter.mapper.PublicationMapper;
 import br.com.otavio.clonetwitter.repositories.LikeRepository;
 import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
 import br.com.otavio.clonetwitter.services.exceptions.UserAlreadyLikedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +24,14 @@ public class LikeService {
     private UserService userService;
 
     @Autowired
+    @Lazy
     private PublicationService publicationService;
 
     @Autowired
     private LikeRepository likeRepository;
+
+    @Autowired
+    private PublicationMapper publicationMapper;
 
     public void createNewLike(Long id) {
         UserEntity userEntity = getUserEntity();
@@ -43,6 +50,11 @@ public class LikeService {
         LikeEntity entity = likeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id not found"));
 
         likeRepository.delete(entity);
+    }
+
+    public Long countLike(PublicationDto publicationDto) {
+        PublicationEntity entity = publicationMapper.toPublicationEntity(publicationDto);
+        return likeRepository.countByPublication(entity);
     }
 
     private UserEntity getUserEntity() {

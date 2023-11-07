@@ -5,6 +5,7 @@ import br.com.otavio.clonetwitter.controllers.UserController;
 import br.com.otavio.clonetwitter.dto.comment.CommentDto;
 import br.com.otavio.clonetwitter.dto.comment.CommentInsertDto;
 import br.com.otavio.clonetwitter.dto.comment.CommentListDto;
+import br.com.otavio.clonetwitter.dto.publication.PublicationDto;
 import br.com.otavio.clonetwitter.dto.user.UserDto;
 import br.com.otavio.clonetwitter.dto.user.UsernameDto;
 import br.com.otavio.clonetwitter.entities.CommentEntity;
@@ -12,14 +13,14 @@ import br.com.otavio.clonetwitter.entities.PublicationEntity;
 import br.com.otavio.clonetwitter.entities.UserEntity;
 import br.com.otavio.clonetwitter.mapper.CommentMapper;
 import br.com.otavio.clonetwitter.mapper.DozerMapper;
+import br.com.otavio.clonetwitter.mapper.PublicationMapper;
 import br.com.otavio.clonetwitter.repositories.CommentRepository;
 import br.com.otavio.clonetwitter.repositories.PublicationRepository;
 import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.sql.Date;
 import java.util.*;
 
@@ -33,13 +34,17 @@ public class CommentService {
     private CommentRepository commentRepository;
 
     @Autowired
-    private PublicationRepository publicationRepository;
+    @Lazy
+    private PublicationService publicationService;
 
     @Autowired
     private UserService userService;
 
     @Autowired
     private CommentMapper commentMapper;
+
+    @Autowired
+    private PublicationMapper publicationMapper;
 
     public CommentDto findById(Long id) {
         CommentEntity entity = commentRepository.findById(id).orElseThrow(
@@ -66,9 +71,13 @@ public class CommentService {
             commentEntity.setLayer(1);
         }
 
-        commentEntity.setPublicationEntity(publicationRepository.findById(commentInsertDto.publicationID())
+        PublicationDto publicationDto = publicationService.findById(commentInsertDto.publicationID());
+
+        commentEntity.setPublicationEntity(publicationMapper.toPublicationEntity(publicationDto));
+
+        /*commentEntity.setPublicationEntity(publicationRepository.findById(commentInsertDto.publicationID())
                 .orElseThrow(() -> new ResourceNotFoundException("id not found"))
-        );
+        );*/
 
         UserDto userDto = userService.getUser();
 
@@ -82,9 +91,10 @@ public class CommentService {
     }
 
     public List<CommentListDto> listComment(Long idPublication) {
-        PublicationEntity publicationEntity = publicationRepository.findById(idPublication).orElseThrow(
-                () -> new ResourceNotFoundException("id not found")
-        );
+
+        PublicationDto publicationDto = publicationService.findById(idPublication);
+
+       PublicationEntity publicationEntity = publicationMapper.toPublicationEntity(publicationDto);
 
         //lista de comentarios
         List<CommentEntity> commentEntityList = commentRepository.findByPublicationEntity(publicationEntity);
@@ -119,6 +129,11 @@ public class CommentService {
         }
 
         return commentArborList;
+    }
+
+    public Long countComment(PublicationDto publicationDto) {
+        PublicationEntity entity = publicationMapper.toPublicationEntity(publicationDto);
+        return commentRepository.countByPublicationEntity(entity);
     }
 
     private UsernameDto newUsernameDto(String username, Long id) {

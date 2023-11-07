@@ -18,4 +18,6 @@ public interface PublicationMapper {
     PublicationCommentDto toPublicationCommentDto(PublicationEntity entity);
     @Mapping(source = "id", target = "key")
     PublicationInteractionsNumberDTO toPublicationInteractionsNumberDto(PublicationEntity entity);
+    @Mapping(source = "key", target = "id")
+    PublicationEntity toPublicationEntity(PublicationDto dto);
 }

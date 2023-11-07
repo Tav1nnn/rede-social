@@ -11,17 +11,12 @@ import br.com.otavio.clonetwitter.entities.ShareEntity;
 import br.com.otavio.clonetwitter.entities.UserEntity;
 import br.com.otavio.clonetwitter.mapper.DozerMapper;
 import br.com.otavio.clonetwitter.mapper.PublicationMapper;
-import br.com.otavio.clonetwitter.repositories.CommentRepository;
-import br.com.otavio.clonetwitter.repositories.LikeRepository;
 import br.com.otavio.clonetwitter.repositories.PublicationRepository;
-import br.com.otavio.clonetwitter.repositories.ShareRepository;
 import br.com.otavio.clonetwitter.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.util.ArrayList;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -32,13 +27,10 @@ public class PublicationService {
     private PublicationRepository publicationRepository;
 
     @Autowired
-    private LikeRepository likeRepository;
+    private LikeService likeService;
 
     @Autowired
-    private ShareRepository shareRepository;
-
-    @Autowired
-    private CommentRepository commentRepository;
+    private ShareService shareService;
 
     @Autowired
     private CommentService commentService;
@@ -48,17 +40,6 @@ public class PublicationService {
 
     @Autowired
     private PublicationMapper publicationMapper;
-
-    public PublicationService(PublicationRepository publicationRepository, LikeRepository likeRepository, ShareRepository shareRepository,
-                              CommentRepository commentRepository, CommentService commentService, UserService userService, PublicationMapper publicationMapper) {
-        this.publicationRepository = publicationRepository;
-        this.likeRepository = likeRepository;
-        this.shareRepository = shareRepository;
-        this.commentRepository = commentRepository;
-        this.commentService = commentService;
-        this.userService = userService;
-        this.publicationMapper = publicationMapper;
-    }
 
     public void createNewPublication(NewPublicationDto publicationDto){
         PublicationEntity publicationEntity = createPublicationEntity(publicationDto);
@@ -104,8 +85,6 @@ public class PublicationService {
 
         return publicationEntityToPublicationInteractionsNumberDTO(entity);
     }
-
-
 
     private PublicationEntity createPublicationEntity(NewPublicationDto publicationDto) {
         PublicationEntity publicationEntity = new PublicationEntity();
@@ -161,15 +140,14 @@ public class PublicationService {
         dto.setUser(newUsernameDto(entity.getUser().getUsername(), entity.getUser().getId()));
 
         NumberOfInteractionsDTO numberOfInteractionsDTO = new NumberOfInteractionsDTO(
-                likeRepository.countByPublication(entity),
-                shareRepository.countByPublication(entity),
-                commentRepository.countByPublicationEntity(entity)
+                likeService.countLike(publicationMapper.toPublicationDto(entity)),
+                shareService.countShare(publicationMapper.toPublicationDto(entity)),
+                commentService.countComment(publicationMapper.toPublicationDto(entity))
         );
         dto.setNumberOfInteractionsDTO(numberOfInteractionsDTO);
         dto.add(linkTo(methodOn(PublicationController.class).findById(dto.getKey())).withSelfRel());
         return dto;
     }
-
 
     private UsernameDto newUsernameDto(String username, Long id) {
         UsernameDto usernameDto = new UsernameDto();
