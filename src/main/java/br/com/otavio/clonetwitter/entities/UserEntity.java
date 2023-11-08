@@ -54,6 +54,13 @@ public class UserEntity implements Serializable, UserDetails {
     )
     private List<RoleEntity> role;
 
+
+    @OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
+    private List<FollowerEntity> followerEntities;
+
+    @OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
+    private List<FollowingEntity> followingEntities;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.stream().map(role -> new SimpleGrantedAuthority(role.getName()))
