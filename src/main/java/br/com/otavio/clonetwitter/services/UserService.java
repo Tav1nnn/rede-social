@@ -99,7 +99,7 @@ public class UserService {
         }
         System.out.println("service user " + entity.getId());
 
-        UserDto dto = new UserDto(
+        return new UserDto(
                 entity.getId(),
                 entity.getUsername(),
                 entity.getEmail(),
@@ -107,8 +107,6 @@ public class UserService {
                 entity.getBirthday(),
                 entity.getBiography()
         );
-
-        return dto;
     }
 
     private UserDto toDto(UserEntity entity) {
