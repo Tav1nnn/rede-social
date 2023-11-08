@@ -1,0 +1,3 @@
+CREATE TABLE follower(
+    id INT PRIMARY KEY AUTO_INCREMENT
+);
