@@ -22,14 +22,6 @@ Este é um projeto pessoal que visa criar uma API de rede social de publicaçõe
 ## Funcionalidades a serem desenvolvidas
 O sistema contará com uma variedade de funcionalidades, tornando a experiência do usuário rica e envolvente:
   
-- 📣 **Notificações**: Os usuários receberão notificações sobre atividades relevantes, como curtidas e comentários em suas publicações.
-  
-- 👥 **Seguidores**: Os usuários podem seguir outros usuários para acompanhar suas atualizações e interagir com suas publicações.
-  
-- 🔍 **Pesquisa com Filtros**: Uma funcionalidade de pesquisa avançada permitirá aos usuários encontrar publicações específicas ou outros usuários com base em diferentes critérios.
-  
-- 📄 **Feed de Publicações**: Os usuários terão acesso a um feed personalizado, exibindo as publicações de quem eles seguem.
-  
 - 📚 **Swagger**: Utilizaremos o Swagger para documentar e facilitar o consumo da API, tornando-a mais acessível e amigável.
   
 - 🧪 **Testes**: Implementaremos testes automatizados para garantir a confiabilidade e a qualidade do sistema.
@@ -48,6 +40,10 @@ Até o momento,  já foi desenvolvido:
 - 🔄 **Compartilhamento**: As publicações podem ser compartilhadas, ampliando sua visibilidade para outros usuários.
   
 - 💬 **Comentários**: Os usuários têm a capacidade de comentar nas publicações, permitindo discussões e interações significativas.
+
+- 👥 **Seguidores**: Os usuários podem seguir outros usuários para acompanhar suas atualizações e interagir com suas publicações.
+
+- 📄 **Feed de Publicações**: Os usuários terão acesso a um feed personalizado, exibindo as publicações de quem eles seguem.
 
 
 ## Configurações e Recursos Adicionais
